@@ -2,6 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2e2e2e #6e6e6e;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 7px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #6e6e6e;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #2e2e2e;
+  border-radius: 6px;
+  border: 3px none #ffffff;
+}
+
 :root {
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 1, 10, 19;
@@ -221,9 +243,8 @@ body {
 }
 
 @keyframes shrink {
-  0%{
+  0% {}
 
-  }
   100% {
     height: 10%;
   }
@@ -239,20 +260,93 @@ body {
 }
 
 
-.mainDiv{
+.mainDiv {
   width: 83.333333%;
   transition: 2s ease-out all;
 }
 
-.mainDivFull{
+.mainDivFull {
   width: 90%;
 }
 
-.champRows{
+.champRows {
   gap: 0.75rem;
   transition: 2s ease-out all;
 }
 
-.champRowsFull{
-  gap:3rem;
+.champRowsFull {
+  gap: 3rem;
+}
+
+.selector {
+  /* visibility: visible;
+  opacity: 1; */
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.5s ease-in all;
+
+  border: 0.8vh solid #b99c6a;
+  width: 95%;
+  display: flex;
+  flex-flow: column;
+  padding: 8vh;
+}
+
+.selectorFull {
+  visibility: visible;
+  opacity: 1;
+  width: 100%;
+}
+
+.searchbar {
+  position: absolute;
+  border: 0.5vh solid #b99c6a;
+  width: 90%;
+  left: 0;
+  right: 0;
+  top: -5vh;
+  margin: auto;
+  height: 10vh;
+  outline: none;
+  background-color: rgb(16, 16, 16);
+}
+
+.inputfield {
+  background-color: rgb(16, 16, 16);
+  outline: none;
+  padding-left: 2vh;
+  font-size: 5vh;
+  color: white;
+}
+
+.champlist {
+  width: 95%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  border: 0.5vh solid #b99c6a;
+  height: 85%;
+  overflow-y: scroll;
+  padding: 0.5vh;
+}
+
+.champ {
+  border: 0.5vh solid #b99c6a;
+  aspect-ratio: 1/1;
+  cursor: pointer;
+}
+
+.champrow{
+  width: 90%;
+  transition: 0.2s ease-in all;
+  
+}
+
+.champrowselected {
+  box-shadow: 0px 0px 1.5vh 1.5vh #b99c6a;
+}
+
+.champrowright{
+  align-self: flex-end;
 }

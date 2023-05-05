@@ -3,25 +3,256 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 1, 10, 19;
+  --background-end-rgb: 1, 5, 10;
+  --background-loader-start-rgb: 10, 20, 50;
+  --background-loader-end-rgb: 5, 10, 20;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+@font-face {
+  font-family: "Beaufort";
+  src: url("../public/Beaufort.ttf");
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
+  color: #b99c6a;
+  font-size: 3.3vh;
+  letter-spacing: -2px;
+  word-spacing: 1px;
+  background: linear-gradient(to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+}
+
+.loader {
+  transition: 0.2s ease-out all;
+  background: linear-gradient(to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+}
+
+.loaderImage {
+  transition: 0.2s ease-out all;
+}
+
+.grborder1 {
+  border-inline-start: 0.1vh solid;
+  border-block-start: 0.1vh solid;
+  border-block-end: 0.1vh solid;
+  border-image-source: radial-gradient(ellipse 50vh 25vh at left 0% top 0, #b99c6a 30%, transparent 70%);
+  border-image-slice: 1;
+}
+
+.grborder2 {
+  border-inline-start: 0.1vh solid;
+  border-block-start: 0.1vh solid;
+  border-block-end: 0.1vh solid;
+  border-image-source: radial-gradient(ellipse 30vh 25vh at left 0% top 0%, #b99c6a 30%, transparent 70%);
+  border-image-slice: 1;
+}
+
+.grborder3 {
+  border-inline-start: 0.1vh solid;
+  border-block-start: 0.1vh solid;
+  border-block-end: 0.1vh solid;
+  border-image-source: radial-gradient(circle 25vh at left, #b99c6a 30%, transparent 70%);
+  border-image-slice: 1;
+}
+
+.grborder4 {
+  border-inline-start: 0.1vh solid;
+  border-block-start: 0.1vh solid;
+  border-block-end: 0.1vh solid;
+  border-image-source: radial-gradient(ellipse 30vh 25vh at bottom left, #b99c6a 30%, transparent 70%);
+  border-image-slice: 1;
+}
+
+.grborder5 {
+  border-inline-start: 0.1vh solid;
+  border-block-start: 0.1vh solid;
+  border-block-end: 0.1vh solid;
+  border-image-source: radial-gradient(ellipse 50vh 25vh at bottom left, #b99c6a 30%, transparent 70%);
+  border-image-slice: 1;
+}
+
+.grborder6 {
+  border-inline-end: 0.1vh solid;
+  border-block-start: 0.1vh solid;
+  border-block-end: 0.1vh solid;
+  border-image-source: radial-gradient(ellipse 50vh 25vh at top right, #b99c6a 30%, transparent 70%);
+  border-image-slice: 1;
+}
+
+.grborder7 {
+  border-inline-end: 0.1vh solid;
+  border-block-start: 0.1vh solid;
+  border-block-end: 0.1vh solid;
+  border-image-source: radial-gradient(ellipse 30vh 25vh at top right, #b99c6a 30%, transparent 70%);
+  border-image-slice: 1;
+}
+
+.grborder8 {
+  border-inline-end: 0.1vh solid;
+  border-block-start: 0.1vh solid;
+  border-block-end: 0.1vh solid;
+  border-image-source: radial-gradient(circle 25vh at right, #b99c6a 30%, transparent 70%);
+  border-image-slice: 1;
+}
+
+.grborder9 {
+  border-inline-end: 0.1vh solid;
+  border-block-start: 0.1vh solid;
+  border-block-end: 0.1vh solid;
+  border-image-source: radial-gradient(ellipse 30vh 25vh at bottom right, #b99c6a 30%, transparent 70%);
+  border-image-slice: 1;
+}
+
+.grborder10 {
+  border-inline-end: 0.1vh solid;
+  border-block-start: 0.1vh solid;
+  border-block-end: 0.1vh solid;
+  border-image-source: radial-gradient(ellipse 50vh 25vh at bottom right, #b99c6a 30%, transparent 70%);
+  border-image-slice: 1;
+}
+
+.circle {
+  -webkit-animation: circle 80s linear infinite;
+  animation: circle 80s linear infinite;
+  border-radius: 50%;
+  transition: 0.5s all;
+}
+
+.circle:hover {
+  box-shadow: inset 0px 0px 4vh 2vh #b99c6a52, 0px 0px 1vh 0.5vh #b99c6a52;
+  width: 420px;
+  background-color: rgba(0, 64, 78, 0.283);
+}
+
+.champpic {
+  box-shadow: inset 0px 0px 4vh 2vh #b99c6a52;
+  opacity: 0.3;
+  cursor: pointer;
+  transition: 0.5s all;
+}
+
+.picshadow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  animation: yellowborder 1s ease-in-out infinite;
+  cursor: pointer;
+}
+
+@-webkit-keyframes circle {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes circle {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes yellowborder {
+  0% {
+    box-shadow: inset 0px 0px 0.5vh 0.1vh #b99c6a;
+  }
+
+  50% {
+    box-shadow: inset 0px 0px 0.5vh 0.7vh #b99c6a;
+
+  }
+
+  100% {
+    box-shadow: inset 0px 0px 0.5vh 0.1vh #b99c6a;
+  }
+}
+
+.fadeoutcircle {
+  animation: fadeout 0.1s forwards ease-in;
+}
+
+.fadeOutTitle {
+  /* animation: fadeouttitle 0.1s forwards ease-in; */
+  animation-name: fadeouttitle, shrink;
+  animation-duration: 0.1s, 1s;
+  animation-fill-mode: forwards, forwards;
+}
+
+.titleShrink {
+  animation: shrink 1s forwards ease-in;
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+    visibility: hidden;
+  }
+}
+
+@keyframes fadeouttitle {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+    visibility: hidden;
+  }
+}
+
+@keyframes shrink {
+  0%{
+
+  }
+  100% {
+    height: 10%;
+  }
+}
+
+.championselect {
+  height: 66.666667%;
+  transition: 2s ease-out;
+}
+
+.championselectFull {
+  height: 90%;
+}
+
+
+.mainDiv{
+  width: 83.333333%;
+  transition: 2s ease-out all;
+}
+
+.mainDivFull{
+  width: 90%;
+}
+
+.champRows{
+  gap: 0.75rem;
+  transition: 2s ease-out all;
+}
+
+.champRowsFull{
+  gap:3rem;
 }

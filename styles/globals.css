@@ -152,10 +152,16 @@ body {
 }
 
 .champpic {
+  filter: grayscale(100%);
   box-shadow: inset 0px 0px 4vh 2vh #b99c6a52;
   opacity: 0.3;
   cursor: pointer;
   transition: 0.5s all;
+}
+
+.champpicPicked {
+  filter: none;
+  opacity: 1;
 }
 
 .picshadow {
@@ -166,6 +172,26 @@ body {
   left: 0;
   animation: yellowborder 1s ease-in-out infinite;
   cursor: pointer;
+}
+
+.picshadowPicked {
+  box-shadow: none;
+  animation: champpicked 0.7s ease-in-out forwards;
+}
+
+@keyframes champpicked {
+  0% {
+    box-shadow: none;
+  }
+
+
+  50%{
+    box-shadow: 0px 0px 1vh 0.5vh green;
+  }
+
+  100%{
+    box-shadow: none;
+  }
 }
 
 @-webkit-keyframes circle {
@@ -337,16 +363,16 @@ body {
   cursor: pointer;
 }
 
-.champrow{
+.champrow {
   width: 90%;
   transition: 0.2s ease-in all;
-  
+
 }
 
 .champrowselected {
   box-shadow: 0px 0px 1.5vh 1.5vh #b99c6a;
 }
 
-.champrowright{
+.champrowright {
   align-self: flex-end;
 }

@@ -20,61 +20,84 @@ export default function Home() {
   const [lastPicked, setLastPicked] = useState(null);
 
   const [champSelect, setChampSelect] = useState(Object.values(championsJson));
+  const [selectedPlayer, setSelectedPlayer] = useState({ "player": "", "team": "" });
 
-  const [teamBlue, setTeamBlue] = useState({
-    "player1": {
-      "champion": {},
-      "role": {},
-      "isPicked": false,
+  const [players, setPlayers] = useState({
+    "blue": {
+      "player1": {
+        "key": "player1",
+        "champion": {},
+        "role": {},
+        "isPicked": false,
+        "primPos": "top",
+      },
+      "player2": {
+        "key": "player2",
+        "champion": {},
+        "role": {},
+        "isPicked": false,
+        "primPos": "jungle",
+      },
+      "player3": {
+        "key": "player3",
+        "champion": {},
+        "role": {},
+        "isPicked": false,
+        "primPos": "mid",
+      },
+      "player4": {
+        "key": "player4",
+        "champion": {},
+        "role": {},
+        "isPicked": false,
+        "primPos": "bottom",
+      },
+      "player5": {
+        "key": "player5",
+        "champion": {},
+        "role": {},
+        "isPicked": false,
+        "primPos": "support",
+      }
     },
-    "player2": {
-      "champion": {},
-      "role": {},
-      "isPicked": false,
-    },
-    "player3": {
-      "champion": {},
-      "role": {},
-      "isPicked": false,
-    },
-    "player4": {
-      "champion": {},
-      "role": {},
-      "isPicked": false,
-    },
-    "player5": {
-      "champion": {},
-      "role": {},
-      "isPicked": false,
+    "red": {
+      "player1": {
+        "key": "player1",
+        "champion": {},
+        "role": {},
+        "isPicked": false,
+        "primPos": "top",
+      },
+      "player2": {
+        "key": "player2",
+        "champion": {},
+        "role": {},
+        "isPicked": false,
+        "primPos": "jungle",
+      },
+      "player3": {
+        "key": "player3",
+        "champion": {},
+        "role": {},
+        "isPicked": false,
+        "primPos": "mid",
+      },
+      "player4": {
+        "key": "player4",
+        "champion": {},
+        "role": {},
+        "isPicked": false,
+        "primPos": "bottom",
+      },
+      "player5": {
+        "key": "player5",
+        "champion": {},
+        "role": {},
+        "isPicked": false,
+        "primPos": "support",
+      }
     }
-  })
 
-  const [teamRed, setTeamRed] = useState({
-    "player1": {
-      "champion": {},
-      "role": {},
-      "isPicked": false,
-    },
-    "player2": {
-      "champion": {},
-      "role": {},
-      "isPicked": false,
-    },
-    "player3": {
-      "champion": {},
-      "role": {},
-      "isPicked": false,
-    },
-    "player4": {
-      "champion": {},
-      "role": {},
-      "isPicked": false,
-    },
-    "player5": {
-      "champion": {},
-      "role": {},
-      "isPicked": false,
-    }
   })
 
   const [loaderProps, setLoaderProps] = useState({
@@ -102,7 +125,7 @@ export default function Home() {
     };
   }, [])
 
-  const pickFirst = () => {
+  const selectFirstPlayer = () => {
     const circle = document.getElementById("circle");
     setFirstPicked(true);
 
@@ -134,7 +157,7 @@ export default function Home() {
     input.focus();
   }
 
-  const pick = (event) => {
+  const selectPlayer = (event, _player, _team) => {
     event.stopPropagation();
 
     const selectorDiv = document.getElementById("selector");
@@ -148,7 +171,7 @@ export default function Home() {
     }
 
     if (!firstPicked) {
-      pickFirst();
+      selectFirstPlayer();
     }
 
 
@@ -167,7 +190,10 @@ export default function Home() {
 
     // console.log(lastPicked);
     setLastPicked(event.target);
+    setSelectedPlayer({ player: _player, team: _team });
   }
+
+
 
   const handleInput = (event) => {
     setChampSelect(Object.values(champions).filter((champ) =>
@@ -175,11 +201,28 @@ export default function Home() {
     ))
   }
 
-  const handleSelect = (champion) => {
+  const handlePick = (_champion) => {
     const selectorDiv = document.getElementById("selector");
     selectorDiv.classList.remove("selectorFull")
     const input = document.getElementById("inputname");
     input.value = "";
+
+    setPlayers({
+      ...players, [selectedPlayer.team]: {
+        ...players[selectedPlayer.team], [selectedPlayer.player]: {
+          ...players[selectedPlayer.team][selectedPlayer.player],
+          champion: _champion,
+          isPicked: true,
+        }
+      }
+    })
+    lastPicked.closest(".champrow").classList.remove("champrowselected");
+    lastPicked.classList.add("picshadowPicked");
+    lastPicked.previousElementSibling.classList.add("champpicPicked")
+  }
+
+  const handleHover = () => {
+
   }
 
   return (
@@ -196,14 +239,31 @@ export default function Home() {
         <div id="championselect" className={`flex flex-row w-full championselect`}>
 
           <div className={`w-[30%] flex flex-col champRows`}>
-            {Object.values(teamBlue).map((player, playerIndex) => {
+            {Object.values(players.blue).map((player, playerIndex) => {
               return (
-                <div className={`h-1/5 grborder${playerIndex + 1} flex flex-row p-3 gap-3 items-center champrow champrowleft`}>
+                <div className={`h-1/5 grborder${playerIndex + 1} flex flex-row p-3 gap-3 items-center champrow champrowleft`} key={playerIndex}>
                   <div className='h-full aspect-square relative' style={{ border: "0.2vh solid #b99c6a" }}>
-                    <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (PICLINK + Object.values(champions)[(index + playerIndex) % Object.keys(champions).length].image.full)} fill sizes='50px' style={{ filter: "grayscale(100%)" }} alt='champ' />
-                    <div className='picshadow' onClick={(event) => pick(event)}></div>
+                    <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (PICLINK + Object.values(champions)[(index + playerIndex) % Object.keys(champions).length].image.full)} fill sizes='50px' alt='champ' />
+                    <div className='picshadow' onClick={(event) => selectPlayer(event, player.key, "blue")}></div>
                   </div>
-                  <div className='h-3/4 m-5 aspect-square rounded-full' style={{ border: "0.2vh solid #b99c6a" }}></div>
+                  <div className='h-3/4 m-5 aspect-square flex flex-col relative'>
+                    <div className='h-full w-full rounded-full z-10' style={{ border: "0.2vh solid #b99c6a" }} onMouseOver={(event) => {
+                      event.target.style.visibility = "hidden";
+                      const sibling = event.target.nextElementSibling;
+                      sibling.style.visibility = "visible";
+                      sibling.style.width = "300px";
+                    }}></div>
+                    <div className='rounded-full z-0' style={{ height: "100%", width: "100%", border: "0.2vh solid #b99c6a", visibility: 'hidden', position: "absolute", left: 0, top: 0, transition: "width 0.5s", border: "0.2vh solid #b99c6a" }}
+                      onMouseOut={(event) => {
+                        const sibling = event.target.previousElementSibling;
+                        event.target.style.width = "100%";
+                        setTimeout(() => {
+                          event.target.style.visibility = "hidden";
+                          sibling.style.visibility = "visible";
+                        }, 500)
+                      }}
+                    ></div>
+                  </div>
                 </div>
               )
             })}
@@ -228,7 +288,7 @@ export default function Home() {
                   {Object.values(champSelect).map((champion, index) => {
                     return (
                       <div className='champ' key={champion.key}>
-                        <Image onClick={() => handleSelect(champion)} src={PICLINK + champion.image.full} width={100} height={100} alt={champion.name} style={{ objectFit: "contain" }} />
+                        <Image onClick={() => handlePick(champion)} src={PICLINK + champion.image.full} width={100} height={100} alt={champion.name} style={{ objectFit: "contain" }} />
                       </div>
                     )
                   })}
@@ -238,12 +298,12 @@ export default function Home() {
           </div>
 
           <div className='w-[30%] flex flex-col gap-3 champRows'>
-            {Object.values(teamRed).map((player, playerIndex) => {
+            {Object.values(players.red).map((player, playerIndex) => {
               return (
-                <div className={`h-1/5 grborder${playerIndex + 6} flex flex-row-reverse p-3 gap-3 items-center champrow champrowright`}>
+                <div className={`h-1/5 grborder${playerIndex + 6} flex flex-row-reverse p-3 gap-3 items-center champrow champrowright`} key={playerIndex}>
                   <div className='h-full aspect-square relative' style={{ border: "0.2vh solid #b99c6a" }}>
-                    <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (PICLINK + Object.values(champions)[(index + playerIndex) % Object.keys(champions).length].image.full)} fill sizes='50px' style={{ filter: "grayscale(100%)" }} alt='champ' />
-                    <div className='picshadow' onClick={(event) => pick(event)}></div>
+                    <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (PICLINK + Object.values(champions)[(index + playerIndex) % Object.keys(champions).length].image.full)} fill sizes='50px' alt='champ' />
+                    <div className='picshadow' onClick={(event) => selectPlayer(event, player.key, "red")}></div>
                   </div>
                   <div className='h-3/4 m-5 aspect-square rounded-full' style={{ border: "0.2vh solid #b99c6a" }}></div>
                 </div>

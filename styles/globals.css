@@ -185,11 +185,11 @@ body {
   }
 
 
-  50%{
+  50% {
     box-shadow: 0px 0px 1vh 0.5vh green;
   }
 
-  100%{
+  100% {
     box-shadow: none;
   }
 }
@@ -375,4 +375,17 @@ body {
 
 .champrowright {
   align-self: flex-end;
+}
+
+.openingPosDiv {
+  height: 100%;
+  width: 100%;
+  border: 0.2vh solid #b99c6a;
+  visibility: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: width 0.5s;
+  border: 0.2vh solid #b99c6a;
+  cursor: pointer;
 }

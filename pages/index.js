@@ -4,6 +4,11 @@ import { useEffect, useState } from 'react'
 import logo from "../public/logo2.png"
 import magn from "../public/magn.png"
 import circle from "../public/circle.png"
+import top from "../public/positions/top.webp"
+import jungle from "../public/positions/jungle.webp"
+import mid from "../public/positions/mid.webp"
+import bottom from "../public/positions/bottom.webp"
+import support from "../public/positions/support.webp"
 import { championsJson } from "../public/champions.js"
 
 const inter = Inter({
@@ -246,23 +251,32 @@ export default function Home() {
                     <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (PICLINK + Object.values(champions)[(index + playerIndex) % Object.keys(champions).length].image.full)} fill sizes='50px' alt='champ' />
                     <div className='picshadow' onClick={(event) => selectPlayer(event, player.key, "blue")}></div>
                   </div>
-                  <div className='h-3/4 m-5 aspect-square flex flex-col relative'>
-                    <div className='h-full w-full rounded-full z-10' style={{ border: "0.2vh solid #b99c6a" }} onMouseOver={(event) => {
-                      event.target.style.visibility = "hidden";
-                      const sibling = event.target.nextElementSibling;
-                      sibling.style.visibility = "visible";
-                      sibling.style.width = "300px";
-                    }}></div>
-                    <div className='rounded-full z-0' style={{ height: "100%", width: "100%", border: "0.2vh solid #b99c6a", visibility: 'hidden', position: "absolute", left: 0, top: 0, transition: "width 0.5s", border: "0.2vh solid #b99c6a" }}
-                      onMouseOut={(event) => {
-                        const sibling = event.target.previousElementSibling;
-                        event.target.style.width = "100%";
-                        setTimeout(() => {
-                          event.target.style.visibility = "hidden";
-                          sibling.style.visibility = "visible";
-                        }, 500)
-                      }}
-                    ></div>
+                  <div className='h-3/4 m-5 aspect-square  relative'  >
+                    <div id={`posplayer${playerIndex}`} style={{ position: "absolute", left: 0, height: "100%", width: "100%", border: "0.2vh solid #b99c6a", transition: "all 0.5s", minWidth: "100%", overflow: "hidden", zIndex: "100" }} className='rounded-full flex flex-row' onMouseEnter={(event) => {
+                      event.target.style.width = "500%"
+                      event.target.style.backgroundColor = "#010a13"
+                    }}>
+                      <div className='h-full aspect-square' style={{ padding: "1vh" }}
+                        onMouseLeave={(event) => {
+                          const posDiv = document.getElementById("posplayer" + playerIndex);
+                          posDiv.style.width = "100%"
+                          posDiv.style.backgroundColor = "transparent"
+                        }}>
+                        <Image src={top} />
+                      </div>
+                      <div className='h-full aspect-square' style={{ pointerEvents: "none", padding: "1vh" }}>
+                        <Image src={jungle} />
+                      </div>
+                      <div className='h-full aspect-square' style={{ pointerEvents: "none", padding: "1vh" }}>
+                        <Image src={mid} />
+                      </div>
+                      <div className='h-full aspect-square' style={{ pointerEvents: "none", padding: "1vh" }}>
+                        <Image src={bottom} />
+                      </div>
+                      <div className='h-full aspect-square' style={{ pointerEvents: "none", padding: "1vh" }}>
+                        <Image src={support} />
+                      </div>
+                    </div>
                   </div>
                 </div>
               )
@@ -315,7 +329,7 @@ export default function Home() {
 
       </div>
 
-      <div id='loader' style={loaderProps} className="absolute top-0 left-0 z-10 w-full h-full items-center flex flex-col font-beaufort align-middle justify-center text-center loader">
+      <div id='loader' style={loaderProps} className="absolute top-0 left-0 z-[1000] w-full h-full items-center flex flex-col font-beaufort align-middle justify-center text-center loader">
         <Image src={logo} className={`${loaderProps.picSize} loaderImage`} alt='logo' priority />
       </div>
     </main>

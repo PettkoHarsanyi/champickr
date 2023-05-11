@@ -389,3 +389,49 @@ body {
   border: 0.2vh solid #b99c6a;
   cursor: pointer;
 }
+
+.pos > img{
+  transition: 0.3s all;
+  border-radius: 30%;
+}
+
+.pos >img:hover{
+  background-color: #b99c6a3b;
+  box-shadow: 0px 0px 0.5vh 0.5vh #b99c6a3b;
+}
+
+.frontDivAnimForward{
+  animation: fadeoutanimation 0.5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeoutanimation {
+  0%{
+    opacity: 1;
+  }
+  50%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 0;
+    display: none !important;
+  }
+}
+
+.frontDivAnimBackward{
+  animation: fadeinanimation 0.5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeinanimation {
+  0%{
+    display: block !important;
+    opacity: 0;
+  }
+  50%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}

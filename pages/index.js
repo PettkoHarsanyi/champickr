@@ -26,6 +26,10 @@ export default function Home() {
 
   const [champSelect, setChampSelect] = useState(Object.values(championsJson));
   const [selectedPlayer, setSelectedPlayer] = useState({ "player": "", "team": "" });
+  const [positionPics] = useState([{ "pos": top, "name": "top" }, { "pos": jungle, "name": "jungle" }, { "pos": mid, "name": "mid" }, { "pos": bottom, "name": "bottom" }, { "pos": support, "name": "support" }]);
+
+  const posToPics = { "top": top, "jungle": jungle, "mid": mid, "bottom": bottom, "support": support }
+  const posToCSSPOS = { "top": 0, "jungle": "-100%", "mid": "-200%", "bottom": "-300%", "support": "-400%" }
 
   const [players, setPlayers] = useState({
     "blue": {
@@ -35,6 +39,7 @@ export default function Home() {
         "role": {},
         "isPicked": false,
         "primPos": "top",
+        "pos": "",
       },
       "player2": {
         "key": "player2",
@@ -42,6 +47,7 @@ export default function Home() {
         "role": {},
         "isPicked": false,
         "primPos": "jungle",
+        "pos": "",
       },
       "player3": {
         "key": "player3",
@@ -49,6 +55,7 @@ export default function Home() {
         "role": {},
         "isPicked": false,
         "primPos": "mid",
+        "pos": "",
       },
       "player4": {
         "key": "player4",
@@ -56,6 +63,7 @@ export default function Home() {
         "role": {},
         "isPicked": false,
         "primPos": "bottom",
+        "pos": "",
       },
       "player5": {
         "key": "player5",
@@ -63,6 +71,7 @@ export default function Home() {
         "role": {},
         "isPicked": false,
         "primPos": "support",
+        "pos": "",
       }
     },
     "red": {
@@ -72,6 +81,7 @@ export default function Home() {
         "role": {},
         "isPicked": false,
         "primPos": "top",
+        "pos": "",
       },
       "player2": {
         "key": "player2",
@@ -79,6 +89,7 @@ export default function Home() {
         "role": {},
         "isPicked": false,
         "primPos": "jungle",
+        "pos": "",
       },
       "player3": {
         "key": "player3",
@@ -86,6 +97,7 @@ export default function Home() {
         "role": {},
         "isPicked": false,
         "primPos": "mid",
+        "pos": "",
       },
       "player4": {
         "key": "player4",
@@ -93,6 +105,7 @@ export default function Home() {
         "role": {},
         "isPicked": false,
         "primPos": "bottom",
+        "pos": "",
       },
       "player5": {
         "key": "player5",
@@ -100,6 +113,7 @@ export default function Home() {
         "role": {},
         "isPicked": false,
         "primPos": "support",
+        "pos": "",
       }
     }
 
@@ -226,8 +240,32 @@ export default function Home() {
     lastPicked.previousElementSibling.classList.add("champpicPicked")
   }
 
-  const handleHover = () => {
+  const [lockedDiv, setLockedDiv] = useState(null);
 
+  const handlePickPos = (_pos, _player, _team, playerIndex) => {
+    setPlayers({
+      ...players, [_team]: {
+        ...players[_team], [_player]: {
+          ...players[_team][_player],
+          pos: _pos.name,
+        }
+      }
+    })
+
+
+    const posDiv = document.getElementById("posplayer" + playerIndex);
+    posDiv.style.width = "100%"
+    posDiv.style.backgroundColor = "transparent"
+    const innerPosDiv = document.getElementById("innerpos" + playerIndex);
+    innerPosDiv.style.right = 0;
+    const frontDiv = document.getElementById("frontDiv" + playerIndex);
+    frontDiv.classList.remove("frontDivAnimForward")
+    frontDiv.classList.add("frontDivAnimBackward");
+    setLockedDiv(posDiv);
+
+    setTimeout(()=>{
+      setLockedDiv(null);
+    },500)
   }
 
   return (
@@ -251,31 +289,44 @@ export default function Home() {
                     <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (PICLINK + Object.values(champions)[(index + playerIndex) % Object.keys(champions).length].image.full)} fill sizes='50px' alt='champ' />
                     <div className='picshadow' onClick={(event) => selectPlayer(event, player.key, "blue")}></div>
                   </div>
-                  <div className='h-3/4 m-5 aspect-square  relative'  >
-                    <div id={`posplayer${playerIndex}`} style={{ position: "absolute", left: 0, height: "100%", width: "100%", border: "0.2vh solid #b99c6a", transition: "all 0.5s", minWidth: "100%", overflow: "hidden", zIndex: "100" }} className='rounded-full flex flex-row' onMouseEnter={(event) => {
-                      event.target.style.width = "500%"
-                      event.target.style.backgroundColor = "#010a13"
-                    }}>
-                      <div className='h-full aspect-square' style={{ padding: "1vh" }}
-                        onMouseLeave={(event) => {
-                          const posDiv = document.getElementById("posplayer" + playerIndex);
-                          posDiv.style.width = "100%"
-                          posDiv.style.backgroundColor = "transparent"
-                        }}>
-                        <Image src={top} />
+                  <div className='h-3/4 m-5 aspect-square relative'  >
+                    <div id={`posplayer${playerIndex}`} className='rounded-full absolute left-0' style={{ height: "100%", width: "100%", border: "0.2vh solid #b99c6a", transition: "all 0.5s", minWidth: "100%", overflow: "hidden", zIndex: "50" }}
+                      onMouseOver={(event) => {
+                        const posDiv = document.getElementById("posplayer" + playerIndex);
+                        if(lockedDiv!==null && lockedDiv.isSameNode(posDiv)){
+                          return;
+                        }
+                        posDiv.style.width = "500%"
+                        posDiv.style.backgroundColor = "#010a13"
+                        const innerPosDiv = document.getElementById("innerpos" + playerIndex);
+                        innerPosDiv.style.right = 0;
+                        const frontDiv = document.getElementById("frontDiv" + playerIndex);
+                        frontDiv.classList.remove("frontDivAnimBackward")
+                        frontDiv.classList.add("frontDivAnimForward");
+                      }} onMouseLeave={(event) => {
+                        const posDiv = document.getElementById("posplayer" + playerIndex);
+                        posDiv.style.width = "100%"
+                        posDiv.style.backgroundColor = "transparent"
+                        const innerPosDiv = document.getElementById("innerpos" + playerIndex);
+                        innerPosDiv.style.right = 0;
+                        const frontDiv = document.getElementById("frontDiv" + playerIndex);
+                        frontDiv.classList.remove("frontDivAnimForward")
+                        frontDiv.classList.add("frontDivAnimBackward");
+                      }}
+                    >
+                      <div id={`innerpos${playerIndex}`} style={{ position: "relative", transition: "0.5s all", width: "100%", right: 0 }} className='h-full flex flex-row justify-between'>
+                        {positionPics.map((pos, index) => {
+                          return (
+                            <div className='h-full aspect-square pos' style={{ padding: "1vh", cursor: "pointer", display: "inline-block" }} onClick={() => { handlePickPos(pos, player.key, "blue", playerIndex) }} key={index}>
+                              <Image src={pos.pos} alt='position'/>
+                            </div>
+                          )
+                        })}
                       </div>
-                      <div className='h-full aspect-square' style={{ pointerEvents: "none", padding: "1vh" }}>
-                        <Image src={jungle} />
-                      </div>
-                      <div className='h-full aspect-square' style={{ pointerEvents: "none", padding: "1vh" }}>
-                        <Image src={mid} />
-                      </div>
-                      <div className='h-full aspect-square' style={{ pointerEvents: "none", padding: "1vh" }}>
-                        <Image src={bottom} />
-                      </div>
-                      <div className='h-full aspect-square' style={{ pointerEvents: "none", padding: "1vh" }}>
-                        <Image src={support} />
-                      </div>
+                    </div>
+
+                    <div id={`frontDiv${playerIndex}`} className='absolute left-0 rounded-full h-full w-full' style={{padding:"1vh", zIndex: "52", backgroundColor: "#010a13", border: "0.2vh solid #b99c6a", pointerEvents: "none", transition: "0.5s all" }}>
+                      <Image src={player.pos == "" ? posToPics[player.primPos] : posToPics[player.pos]} alt='position'/>
                     </div>
                   </div>
                 </div>

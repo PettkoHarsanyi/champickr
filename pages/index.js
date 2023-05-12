@@ -258,14 +258,14 @@ export default function Home() {
     posDiv.style.backgroundColor = "transparent"
     const innerPosDiv = document.getElementById("innerpos" + playerIndex);
     innerPosDiv.style.right = 0;
+    innerPosDiv.style.opacity = 0;
     const frontDiv = document.getElementById("frontDiv" + playerIndex);
     frontDiv.classList.remove("frontDivAnimForward")
-    frontDiv.classList.add("frontDivAnimBackward");
     setLockedDiv(posDiv);
 
-    setTimeout(()=>{
+    setTimeout(() => {
       setLockedDiv(null);
-    },500)
+    }, 500)
   }
 
   return (
@@ -289,17 +289,18 @@ export default function Home() {
                     <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (PICLINK + Object.values(champions)[(index + playerIndex) % Object.keys(champions).length].image.full)} fill sizes='50px' alt='champ' />
                     <div className='picshadow' onClick={(event) => selectPlayer(event, player.key, "blue")}></div>
                   </div>
-                  <div className='h-3/4 m-5 aspect-square relative'  >
-                    <div id={`posplayer${playerIndex}`} className='rounded-full absolute left-0' style={{ height: "100%", width: "100%", border: "0.2vh solid #b99c6a", transition: "all 0.5s", minWidth: "100%", overflow: "hidden", zIndex: "50" }}
+                  <div className='h-3/4 aspect-square relative'  >
+                    <div id={`posplayer${playerIndex}`} className='rounded-full absolute left-0' style={{ height: "100%", width: "100%", border: "0.2vh solid #b99c6a", transition: "all 0.5s, opacity 1s", minWidth: "100%", overflow: "hidden", zIndex: "50" }}
                       onMouseOver={(event) => {
                         const posDiv = document.getElementById("posplayer" + playerIndex);
-                        if(lockedDiv!==null && lockedDiv.isSameNode(posDiv)){
+                        if (lockedDiv !== null && lockedDiv.isSameNode(posDiv)) {
                           return;
                         }
                         posDiv.style.width = "500%"
                         posDiv.style.backgroundColor = "#010a13"
                         const innerPosDiv = document.getElementById("innerpos" + playerIndex);
                         innerPosDiv.style.right = 0;
+                        innerPosDiv.style.opacity = 1;
                         const frontDiv = document.getElementById("frontDiv" + playerIndex);
                         frontDiv.classList.remove("frontDivAnimBackward")
                         frontDiv.classList.add("frontDivAnimForward");
@@ -309,26 +310,30 @@ export default function Home() {
                         posDiv.style.backgroundColor = "transparent"
                         const innerPosDiv = document.getElementById("innerpos" + playerIndex);
                         innerPosDiv.style.right = 0;
+                        innerPosDiv.style.opacity = 0;
                         const frontDiv = document.getElementById("frontDiv" + playerIndex);
                         frontDiv.classList.remove("frontDivAnimForward")
                         frontDiv.classList.add("frontDivAnimBackward");
                       }}
                     >
-                      <div id={`innerpos${playerIndex}`} style={{ position: "relative", transition: "0.5s all", width: "100%", right: 0 }} className='h-full flex flex-row justify-between'>
+                      <div id={`innerpos${playerIndex}`} style={{ position: "relative", transition: "0.5s all", opacity: 0, width: "100%", right: 0 }} className='h-full flex flex-row justify-between'>
                         {positionPics.map((pos, index) => {
                           return (
                             <div className='h-full aspect-square pos' style={{ padding: "1vh", cursor: "pointer", display: "inline-block" }} onClick={() => { handlePickPos(pos, player.key, "blue", playerIndex) }} key={index}>
-                              <Image src={pos.pos} alt='position'/>
+                              <Image src={pos.pos} alt='position' />
                             </div>
                           )
                         })}
                       </div>
                     </div>
 
-                    <div id={`frontDiv${playerIndex}`} className='absolute left-0 rounded-full h-full w-full' style={{padding:"1vh", zIndex: "52", backgroundColor: "#010a13", border: "0.2vh solid #b99c6a", pointerEvents: "none", transition: "0.5s all" }}>
-                      <Image src={player.pos == "" ? posToPics[player.primPos] : posToPics[player.pos]} alt='position'/>
+                    <div id={`frontDiv${playerIndex}`} className='absolute left-0 rounded-full h-full w-full flex flex-col justify-between pt-1' style={{ zIndex: "52", backgroundColor: "#010a13", border: "0.2vh solid #b99c6a", pointerEvents: "none", transition: "0.5s all" }}>
+                      <Image src={player.pos == "" ? posToPics[player.primPos] : posToPics[player.pos]} alt='position' className='h-3/5 aspect-square' style={{objectFit: "contain"}}/>
+                      <div className='text-lg h-2/5' style={{lineHeight:"1"}}>20%</div>
+
                     </div>
                   </div>
+
                 </div>
               )
             })}

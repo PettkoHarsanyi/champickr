@@ -40,6 +40,13 @@ export default function Home() {
         "isPicked": false,
         "primPos": "top",
         "pos": "",
+        "posPicked": false,
+        "posProb": 20,
+        "classProb": {
+          "class": "",
+          "prob": 0,
+        },
+        "self": false,
       },
       "player2": {
         "key": "player2",
@@ -48,6 +55,13 @@ export default function Home() {
         "isPicked": false,
         "primPos": "jungle",
         "pos": "",
+        "posPicked": false,
+        "posProb": 20,
+        "classProb": {
+          "class": "",
+          "prob": 0,
+        },
+        "self": false,
       },
       "player3": {
         "key": "player3",
@@ -56,6 +70,13 @@ export default function Home() {
         "isPicked": false,
         "primPos": "mid",
         "pos": "",
+        "posPicked": false,
+        "posProb": 20,
+        "classProb": {
+          "class": "",
+          "prob": 0,
+        },
+        "self": false,
       },
       "player4": {
         "key": "player4",
@@ -64,6 +85,13 @@ export default function Home() {
         "isPicked": false,
         "primPos": "bottom",
         "pos": "",
+        "posPicked": false,
+        "posProb": 20,
+        "classProb": {
+          "class": "",
+          "prob": 0,
+        },
+        "self": false,
       },
       "player5": {
         "key": "player5",
@@ -72,6 +100,13 @@ export default function Home() {
         "isPicked": false,
         "primPos": "support",
         "pos": "",
+        "posPicked": false,
+        "posProb": 20,
+        "classProb": {
+          "class": "",
+          "prob": 0,
+        },
+        "self": false,
       }
     },
     "red": {
@@ -82,6 +117,12 @@ export default function Home() {
         "isPicked": false,
         "primPos": "top",
         "pos": "",
+        "posPicked": false,
+        "posProb": 20,
+        "classProb": {
+          "class": "",
+          "prob": 0,
+        }
       },
       "player2": {
         "key": "player2",
@@ -90,6 +131,12 @@ export default function Home() {
         "isPicked": false,
         "primPos": "jungle",
         "pos": "",
+        "posPicked": false,
+        "posProb": 20,
+        "classProb": {
+          "class": "",
+          "prob": 0,
+        }
       },
       "player3": {
         "key": "player3",
@@ -98,6 +145,12 @@ export default function Home() {
         "isPicked": false,
         "primPos": "mid",
         "pos": "",
+        "posPicked": false,
+        "posProb": 20,
+        "classProb": {
+          "class": "",
+          "prob": 0,
+        }
       },
       "player4": {
         "key": "player4",
@@ -106,6 +159,12 @@ export default function Home() {
         "isPicked": false,
         "primPos": "bottom",
         "pos": "",
+        "posPicked": false,
+        "posProb": 20,
+        "classProb": {
+          "class": "",
+          "prob": 0,
+        }
       },
       "player5": {
         "key": "player5",
@@ -114,6 +173,12 @@ export default function Home() {
         "isPicked": false,
         "primPos": "support",
         "pos": "",
+        "posPicked": false,
+        "posProb": 20,
+        "classProb": {
+          "class": "",
+          "prob": 0,
+        }
       }
     }
 
@@ -216,7 +281,7 @@ export default function Home() {
 
   const handleInput = (event) => {
     setChampSelect(Object.values(champions).filter((champ) =>
-      champ.name.toUpperCase().includes(event.target.value.toUpperCase())
+      champ.id.toUpperCase().includes(event.target.value.toUpperCase())
     ))
   }
 
@@ -248,6 +313,7 @@ export default function Home() {
         ...players[_team], [_player]: {
           ...players[_team][_player],
           pos: _pos.name,
+          posPicked: true,
         }
       }
     })
@@ -261,6 +327,8 @@ export default function Home() {
     innerPosDiv.style.opacity = 0;
     const frontDiv = document.getElementById("frontDiv" + playerIndex);
     frontDiv.classList.remove("frontDivAnimForward")
+    posDiv.classList.remove("pickAnimation");
+    posDiv.classList.add("posPicked");
     setLockedDiv(posDiv);
 
     setTimeout(() => {
@@ -268,11 +336,30 @@ export default function Home() {
     }, 500)
   }
 
+  const modifyPlayer = (_team, _player, _modifyable, _value) => {
+    setPlayers({
+      ...players, [_team]: {
+        ...players[_team], [_player]: {
+          ...players[_team][_player],
+          [_modifyable]: _value,
+        }
+      }
+    })
+  }
+
+  const handlePickSelf = (playerName) => {
+    const selfDivs = document.getElementsByClassName("selfpicker");
+    for (let index = 0; index < selfDivs.length; index++) {
+      selfDivs[index].style.display = "none";
+    }
+    modifyPlayer("blue", playerName, "self", true);
+  }
+
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between ${inter.className}`}
     >
-      <div id='mainDiv' className="z-9 w-10/12 h-screen items-center font-mono flex flex-col font-beaufort align-middle justify-center text-center p-10 mainDiv">
+      <div id='mainDiv' className="z-9 w-full h-screen items-center font-mono font-beaufort align-middle justify-center text-center  mainDiv">
         <div id='titlediv' className='h-2/6 px-10'>
           <div style={{ fontSize: "8vh" }}>CHAMPICKR</div>
           <div>Calculate the class and subclass of the champion you have the best winning chance with, based on the enemy dominating class.</div>
@@ -284,56 +371,66 @@ export default function Home() {
           <div className={`w-[30%] flex flex-col champRows`}>
             {Object.values(players.blue).map((player, playerIndex) => {
               return (
-                <div className={`h-1/5 grborder${playerIndex + 1} flex flex-row p-3 gap-3 items-center champrow champrowleft`} key={playerIndex}>
-                  <div className='h-full aspect-square relative' style={{ border: "0.2vh solid #b99c6a" }}>
-                    <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (PICLINK + Object.values(champions)[(index + playerIndex) % Object.keys(champions).length].image.full)} fill sizes='50px' alt='champ' />
-                    <div className='picshadow' onClick={(event) => selectPlayer(event, player.key, "blue")}></div>
-                  </div>
-                  <div className='h-3/4 aspect-square relative'  >
-                    <div id={`posplayer${playerIndex}`} className='rounded-full absolute left-0' style={{ height: "100%", width: "100%", border: "0.2vh solid #b99c6a", transition: "all 0.5s, opacity 1s", minWidth: "100%", overflow: "hidden", zIndex: "50" }}
-                      onMouseOver={(event) => {
-                        const posDiv = document.getElementById("posplayer" + playerIndex);
-                        if (lockedDiv !== null && lockedDiv.isSameNode(posDiv)) {
-                          return;
-                        }
-                        posDiv.style.width = "500%"
-                        posDiv.style.backgroundColor = "#010a13"
-                        const innerPosDiv = document.getElementById("innerpos" + playerIndex);
-                        innerPosDiv.style.right = 0;
-                        innerPosDiv.style.opacity = 1;
-                        const frontDiv = document.getElementById("frontDiv" + playerIndex);
-                        frontDiv.classList.remove("frontDivAnimBackward")
-                        frontDiv.classList.add("frontDivAnimForward");
-                      }} onMouseLeave={(event) => {
-                        const posDiv = document.getElementById("posplayer" + playerIndex);
-                        posDiv.style.width = "100%"
-                        posDiv.style.backgroundColor = "transparent"
-                        const innerPosDiv = document.getElementById("innerpos" + playerIndex);
-                        innerPosDiv.style.right = 0;
-                        innerPosDiv.style.opacity = 0;
-                        const frontDiv = document.getElementById("frontDiv" + playerIndex);
-                        frontDiv.classList.remove("frontDivAnimForward")
-                        frontDiv.classList.add("frontDivAnimBackward");
-                      }}
-                    >
-                      <div id={`innerpos${playerIndex}`} style={{ position: "relative", transition: "0.5s all", opacity: 0, width: "100%", right: 0 }} className='h-full flex flex-row justify-between'>
-                        {positionPics.map((pos, index) => {
-                          return (
-                            <div className='h-full aspect-square pos' style={{ padding: "1vh", cursor: "pointer", display: "inline-block" }} onClick={() => { handlePickPos(pos, player.key, "blue", playerIndex) }} key={index}>
-                              <Image src={pos.pos} alt='position' />
-                            </div>
-                          )
-                        })}
+                <div className='flex flex-row h-1/5 align-middle items-center gap-5' key={playerIndex}>
+                  <div className='cursor-pointer opacity-30 hover:opacity-100 text-gray-400 hover:text-green-600 transition-all selfpicker' onClick={() => handlePickSelf(player.key)}>me</div>
+                  <div className={`grborder${playerIndex + 1} h-full flex flex-row p-3 gap-3 items-center champrow champrowleft transition-all`} >
+                    <div className='h-full aspect-square relative flex items-center justify-center' style={{ border: "0.2vh solid #b99c6a" }}>
+                      {
+                        !player.self ?
+                          <>
+                            <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (PICLINK + Object.values(champions)[(index + playerIndex) % Object.keys(champions).length].image.full)} fill sizes='50px' alt='champ' />
+                            <div className='picshadow' onClick={(event) => selectPlayer(event, player.key, "blue")}></div>
+                          </>
+                          :
+                          <div>YOU</div>
+                      }
+                    </div>
+                    <div className='h-3/4 aspect-square relative'  >
+                      <div id={`posplayer${playerIndex}`} className='rounded-full absolute left-0 pickAnimation' style={{ height: "100%", width: "100%", border: "0.2vh solid #b99c6a", transition: "all 0.5s, opacity 1s", minWidth: "100%", overflow: "hidden", zIndex: "50" }}
+                        onMouseOver={(event) => {
+                          const posDiv = document.getElementById("posplayer" + playerIndex);
+                          if (lockedDiv !== null && lockedDiv.isSameNode(posDiv)) {
+                            return;
+                          }
+                          posDiv.style.width = "500%"
+                          posDiv.style.backgroundColor = "#010a13"
+                          const innerPosDiv = document.getElementById("innerpos" + playerIndex);
+                          innerPosDiv.style.right = 0;
+                          innerPosDiv.style.opacity = 1;
+                          const frontDiv = document.getElementById("frontDiv" + playerIndex);
+                          frontDiv.classList.remove("frontDivAnimBackward")
+                          frontDiv.classList.add("frontDivAnimForward");
+                        }} onMouseLeave={(event) => {
+                          const posDiv = document.getElementById("posplayer" + playerIndex);
+                          posDiv.style.width = "100%"
+                          posDiv.style.backgroundColor = "transparent"
+                          const innerPosDiv = document.getElementById("innerpos" + playerIndex);
+                          innerPosDiv.style.right = 0;
+                          innerPosDiv.style.opacity = 0;
+                          const frontDiv = document.getElementById("frontDiv" + playerIndex);
+                          frontDiv.classList.remove("frontDivAnimForward")
+                          frontDiv.classList.add("frontDivAnimBackward");
+                        }}
+                      >
+                        <div id={`innerpos${playerIndex}`} style={{ position: "relative", transition: "0.5s all", opacity: 0, width: "100%", right: 0 }} className='h-full flex flex-row justify-between'>
+                          {positionPics.map((pos, index) => {
+                            return (
+                              <div className='h-full aspect-square pos' style={{ padding: "1vh", cursor: "pointer", display: "inline-block" }} onClick={() => { handlePickPos(pos, player.key, "blue", playerIndex) }} key={index}>
+                                <Image src={pos.pos} alt='position' />
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+
+                      <div id={`frontDiv${playerIndex}`} className='absolute left-0 rounded-full h-full w-full flex flex-col justify-between' style={{ zIndex: "52", backgroundColor: "#010a13", border: "0.2vh solid #b99c6a", pointerEvents: "none", transition: "0.5s all" }}>
+                        <Image src={player.pos == "" ? posToPics[player.primPos] : posToPics[player.pos]} alt='position' className={`${player.posPicked ? "h-max p-2" : "h-3/5"} aspect-square`} style={{ objectFit: "contain" }} />
+                        {!player.posPicked && <div className='text-lg h-2/5' style={{ lineHeight: "1" }}>{player.posProb}%</div>}
+
                       </div>
                     </div>
 
-                    <div id={`frontDiv${playerIndex}`} className='absolute left-0 rounded-full h-full w-full flex flex-col justify-between pt-1' style={{ zIndex: "52", backgroundColor: "#010a13", border: "0.2vh solid #b99c6a", pointerEvents: "none", transition: "0.5s all" }}>
-                      <Image src={player.pos == "" ? posToPics[player.primPos] : posToPics[player.pos]} alt='position' className='h-3/5 aspect-square' style={{objectFit: "contain"}}/>
-                      <div className='text-lg h-2/5' style={{lineHeight:"1"}}>20%</div>
-
-                    </div>
                   </div>
-
                 </div>
               )
             })}

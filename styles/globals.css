@@ -287,12 +287,14 @@ body {
 
 
 .mainDiv {
-  width: 83.333333%;
   transition: 2s ease-out all;
+  width: 83.3%;
+  padding: 5vh;
 }
 
 .mainDivFull {
-  width: 90%;
+  width: 100%;
+  padding: 5vh;
 }
 
 .champRows {
@@ -312,7 +314,7 @@ body {
   transition: 0.5s ease-in all;
 
   border: 0.8vh solid #b99c6a;
-  width: 95%;
+  width: 75%;
   display: flex;
   flex-flow: column;
   padding: 8vh;
@@ -321,7 +323,7 @@ body {
 .selectorFull {
   visibility: visible;
   opacity: 1;
-  width: 100%;
+  width: 80%;
 }
 
 .searchbar {
@@ -415,5 +417,28 @@ body {
   100%{
     opacity: 0;
     display: none !important;
+  }
+}
+
+.pickAnimation{
+  animation: yellowborder2 1s infinite;
+}
+
+.posPicked{
+  animation: champpicked 0.7s ease-in-out forwards;
+}
+
+@keyframes yellowborder2 {
+  0% {
+    box-shadow: 0px 0px 0.3vh 0.1vh #b99c6a;
+  }
+
+  50% {
+    box-shadow: 0px 0px 0.3vh 0.7vh #b99c6a;
+
+  }
+
+  100% {
+    box-shadow: 0px 0px 0.3vh 0.1vh #b99c6a;
   }
 }

@@ -9,7 +9,15 @@ import jungle from "../public/positions/jungle.webp"
 import mid from "../public/positions/mid.webp"
 import bottom from "../public/positions/bottom.webp"
 import support from "../public/positions/support.webp"
+import controller from "../public/classes/controller.webp"
+import fighter from "../public/classes/fighter.webp"
+import mage from "../public/classes/mage.webp"
+import slayer from "../public/classes/slayer.webp"
+import marksman from "../public/classes/marksman.webp"
+import tank from "../public/classes/tank.webp"
 import { championsJson } from "../public/champions.js"
+import { playersJson } from "../public/players.js"
+import { classes } from "../public/classes.js"
 
 const inter = Inter({
   subsets: ['latin'],
@@ -26,163 +34,15 @@ export default function Home() {
 
   const [champSelect, setChampSelect] = useState(Object.values(championsJson));
   const [selectedPlayer, setSelectedPlayer] = useState({ "player": "", "team": "" });
+  const [classSelector, setClassSelector] = useState([]);
+  const [laneSelector, setLaneSelector] = useState([]);
+
   const [positionPics] = useState([{ "pos": top, "name": "top" }, { "pos": jungle, "name": "jungle" }, { "pos": mid, "name": "mid" }, { "pos": bottom, "name": "bottom" }, { "pos": support, "name": "support" }]);
 
   const posToPics = { "top": top, "jungle": jungle, "mid": mid, "bottom": bottom, "support": support }
   const posToCSSPOS = { "top": 0, "jungle": "-100%", "mid": "-200%", "bottom": "-300%", "support": "-400%" }
 
-  const [players, setPlayers] = useState({
-    "blue": {
-      "player1": {
-        "key": "player1",
-        "champion": {},
-        "role": {},
-        "isPicked": false,
-        "primPos": "top",
-        "pos": "",
-        "posPicked": false,
-        "posProb": 20,
-        "classProb": {
-          "class": "",
-          "prob": 0,
-        },
-        "self": false,
-      },
-      "player2": {
-        "key": "player2",
-        "champion": {},
-        "role": {},
-        "isPicked": false,
-        "primPos": "jungle",
-        "pos": "",
-        "posPicked": false,
-        "posProb": 20,
-        "classProb": {
-          "class": "",
-          "prob": 0,
-        },
-        "self": false,
-      },
-      "player3": {
-        "key": "player3",
-        "champion": {},
-        "role": {},
-        "isPicked": false,
-        "primPos": "mid",
-        "pos": "",
-        "posPicked": false,
-        "posProb": 20,
-        "classProb": {
-          "class": "",
-          "prob": 0,
-        },
-        "self": false,
-      },
-      "player4": {
-        "key": "player4",
-        "champion": {},
-        "role": {},
-        "isPicked": false,
-        "primPos": "bottom",
-        "pos": "",
-        "posPicked": false,
-        "posProb": 20,
-        "classProb": {
-          "class": "",
-          "prob": 0,
-        },
-        "self": false,
-      },
-      "player5": {
-        "key": "player5",
-        "champion": {},
-        "role": {},
-        "isPicked": false,
-        "primPos": "support",
-        "pos": "",
-        "posPicked": false,
-        "posProb": 20,
-        "classProb": {
-          "class": "",
-          "prob": 0,
-        },
-        "self": false,
-      }
-    },
-    "red": {
-      "player1": {
-        "key": "player1",
-        "champion": {},
-        "role": {},
-        "isPicked": false,
-        "primPos": "top",
-        "pos": "",
-        "posPicked": false,
-        "posProb": 20,
-        "classProb": {
-          "class": "",
-          "prob": 0,
-        }
-      },
-      "player2": {
-        "key": "player2",
-        "champion": {},
-        "role": {},
-        "isPicked": false,
-        "primPos": "jungle",
-        "pos": "",
-        "posPicked": false,
-        "posProb": 20,
-        "classProb": {
-          "class": "",
-          "prob": 0,
-        }
-      },
-      "player3": {
-        "key": "player3",
-        "champion": {},
-        "role": {},
-        "isPicked": false,
-        "primPos": "mid",
-        "pos": "",
-        "posPicked": false,
-        "posProb": 20,
-        "classProb": {
-          "class": "",
-          "prob": 0,
-        }
-      },
-      "player4": {
-        "key": "player4",
-        "champion": {},
-        "role": {},
-        "isPicked": false,
-        "primPos": "bottom",
-        "pos": "",
-        "posPicked": false,
-        "posProb": 20,
-        "classProb": {
-          "class": "",
-          "prob": 0,
-        }
-      },
-      "player5": {
-        "key": "player5",
-        "champion": {},
-        "role": {},
-        "isPicked": false,
-        "primPos": "support",
-        "pos": "",
-        "posPicked": false,
-        "posProb": 20,
-        "classProb": {
-          "class": "",
-          "prob": 0,
-        }
-      }
-    }
-
-  })
+  const [players, setPlayers] = useState(playersJson)
 
   const [loaderProps, setLoaderProps] = useState({
     opacity: 1,
@@ -220,8 +80,6 @@ export default function Home() {
 
     const titleDiv = document.getElementById("titlediv");
     titleDiv.classList.add("fadeOutTitle");
-    setTimeout(() => {
-    }, 1100)
 
     const championSelect = document.getElementById("championselect");
     championSelect.classList.add("championselectFull");
@@ -300,6 +158,7 @@ export default function Home() {
         }
       }
     })
+
     lastPicked.closest(".champrow").classList.remove("champrowselected");
     lastPicked.classList.add("picshadowPicked");
     lastPicked.previousElementSibling.classList.add("champpicPicked")
@@ -336,6 +195,39 @@ export default function Home() {
     }, 500)
   }
 
+
+
+
+  const secondBaseCountersOf = (_class) => {
+    const secondBaseCounters = [];
+    classes[_class].counter.forEach((counter) => {
+
+      for (const [key, value] of Object.entries(classes)) {
+        if (value.strongAgainst.includes(counter)) {
+          secondBaseCounters.push(value.name);
+        }
+      }
+    })
+
+    const result = {}
+    for (let i = 0; i < secondBaseCounters.length; i++) {
+      const item = secondBaseCounters[i];
+      if (result[item]) {
+        result[item] += 1;
+      } else {
+        result[item] = 1;
+      }
+    }
+
+
+    console.log(result);
+  }
+
+  useEffect(() => {
+    secondBaseCountersOf("marksman");
+  }, [])
+
+
   const modifyPlayer = (_team, _player, _modifyable, _value) => {
     setPlayers({
       ...players, [_team]: {
@@ -347,13 +239,51 @@ export default function Home() {
     })
   }
 
-  const handlePickSelf = (playerName) => {
+  const handlePickSelf = (playerName, playerIndex) => {
     const selfDivs = document.getElementsByClassName("selfpicker");
     for (let index = 0; index < selfDivs.length; index++) {
-      selfDivs[index].style.display = "none";
+      selfDivs[index].classList.add("fadeOutMeDiv");
     }
+    const clickedMeDiv = document.getElementById("leftpicshadow" + (playerIndex + 1));
+
+    if (lastPicked.isSameNode(clickedMeDiv)) {
+      lastPicked.closest(".champrow").classList.remove("champrowselected");
+      const selectorDiv = document.getElementById("selector");
+      selectorDiv.classList.remove("selectorFull")
+      setLastPicked(null);
+    }
+
     modifyPlayer("blue", playerName, "self", true);
   }
+
+  const handleSelectLane = (lane) => {
+    setLaneSelector(() => {
+      if (laneSelector.includes(lane)) {
+        return laneSelector.filter((_lane) => lane != _lane)
+      }
+      return [...laneSelector, lane]
+    })
+  }
+
+  const handleSelectClass = (_class) => {
+    setClassSelector(() => {
+      if (classSelector.includes(_class)) {
+        return classSelector.filter((_class2) => _class != _class2)
+      }
+      return [...classSelector, _class]
+    })
+  }
+
+  useEffect(() => {
+    setChampSelect(Object.values(champions).filter((champ) => {
+      return true;
+    }))
+  }, [classSelector, laneSelector])
+
+  useEffect(() => {
+    players.forEach
+    console.log("Változás")
+  }, [players])
 
   return (
     <main
@@ -372,14 +302,14 @@ export default function Home() {
             {Object.values(players.blue).map((player, playerIndex) => {
               return (
                 <div className='flex flex-row h-1/5 align-middle items-center gap-5' key={playerIndex}>
-                  <div className='cursor-pointer opacity-30 hover:opacity-100 text-gray-400 hover:text-green-600 transition-all selfpicker' onClick={() => handlePickSelf(player.key)}>me</div>
-                  <div className={`grborder${playerIndex + 1} h-full flex flex-row p-3 gap-3 items-center champrow champrowleft transition-all`} >
+                  <div className='w-[15%] cursor-pointer opacity-30 hover:opacity-100 text-gray-400 hover:text-green-600 transition-all selfpicker' onClick={() => handlePickSelf(player.key, playerIndex)}>me</div>
+                  <div id={`leftchamprow${playerIndex + 1}`} className={`grborder${playerIndex + 1} grow h-full flex flex-row p-3 gap-3 items-center champrow champrowleft transition-all`} >
                     <div className='h-full aspect-square relative flex items-center justify-center' style={{ border: "0.2vh solid #b99c6a" }}>
                       {
                         !player.self ?
                           <>
                             <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (PICLINK + Object.values(champions)[(index + playerIndex) % Object.keys(champions).length].image.full)} fill sizes='50px' alt='champ' />
-                            <div className='picshadow' onClick={(event) => selectPlayer(event, player.key, "blue")}></div>
+                            <div id={`leftpicshadow${playerIndex + 1}`} className='picshadow' onClick={(event) => selectPlayer(event, player.key, "blue")}></div>
                           </>
                           :
                           <div>YOU</div>
@@ -443,14 +373,31 @@ export default function Home() {
                 <Image src={circle} width={400} alt="circle" className='circle' />
               </div>
             </div>
-            <div id='selector' className='absolute h-4/5 border border-red-800 left-0 right-0 m-auto selector'>
+            <div id='selector' className='absolute h-[90%] border border-red-800 left-0 right-0 m-auto selector'>
               <div className='searchbar flex flex-row justify-between align-middle'>
                 <input onChange={handleInput} id="inputname" type='text' placeholder='Start typing...' className='w-4/5 inputfield' style={{ flex: 1 }} autoFocus />
                 <div style={{ width: "50px", margin: "2vh" }}>
                   <Image src={magn} alt='magnifyer' />
                 </div>
               </div>
-              <div className='champlist container m-auto '>
+              <div className='h-[20%] flex flex-col justify-evenly items-center'>
+                <div className='border-[#b99c6a] border rounded-full flex flex-row gap-3 p-2 overflow-hidden'>
+                  <Image src={top} alt="top" width={30} className={laneSelector.includes("top") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectLane("top") }} />
+                  <Image src={jungle} alt="jungle" width={30} className={laneSelector.includes("jungle") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectLane("jungle") }} />
+                  <Image src={mid} alt="mid" width={30} className={laneSelector.includes("mid") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectLane("mid") }} />
+                  <Image src={bottom} alt="bottom" width={30} className={laneSelector.includes("bottom") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectLane("bottom") }} />
+                  <Image src={support} alt="support" width={30} className={laneSelector.includes("support") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectLane("support") }} />
+                </div>
+                <div className='border-[#b99c6a] border rounded-full flex flex-row gap-3 p-2'>
+                  <Image src={tank} alt="tank" width={30} className={classSelector.includes("tank") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("tank") }} />
+                  <Image src={fighter} alt="fighter" width={30} className={classSelector.includes("fighter") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("fighter") }} />
+                  <Image src={mage} alt="mage" width={30} className={classSelector.includes("mage") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("mage") }} />
+                  <Image src={slayer} alt="slayer" width={30} className={classSelector.includes("slayer") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("slayer") }} />
+                  <Image src={marksman} alt="marksman" width={30} className={classSelector.includes("marksman") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("marksman") }} />
+                  <Image src={controller} alt="controller" width={30} className={classSelector.includes("controller") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("controller") }} />
+                </div>
+              </div>
+              <div className='champlist container m-auto'>
                 <div className='w-full grid grid-cols-7 gap-1 champsscroll'>
                   {Object.values(champSelect).map((champion, index) => {
                     return (

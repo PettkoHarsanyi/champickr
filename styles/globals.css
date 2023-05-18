@@ -317,7 +317,7 @@ body {
   width: 75%;
   display: flex;
   flex-flow: column;
-  padding: 8vh;
+  padding-top: 5.5vh;
 }
 
 .selectorFull {
@@ -352,9 +352,9 @@ body {
   position: absolute;
   left: 0;
   right: 0;
-  margin: auto;
+  bottom: 3%;
   border: 0.5vh solid #b99c6a;
-  height: 85%;
+  height: 70%;
   overflow-y: scroll;
   padding: 0.5vh;
 }
@@ -392,39 +392,41 @@ body {
   cursor: pointer;
 }
 
-.pos > img{
+.pos>img {
   transition: 0.3s all;
   border-radius: 30%;
 }
 
-.pos >img:hover{
+.pos>img:hover {
   background-color: #b99c6a3b;
   box-shadow: 0px 0px 0.5vh 0.5vh #b99c6a3b;
 }
 
-.frontDivAnimForward{
+.frontDivAnimForward {
   animation: fadeoutanimation 0.5s;
   animation-fill-mode: forwards;
 }
 
 @keyframes fadeoutanimation {
-  0%{
+  0% {
     opacity: 1;
   }
-  50%{
+
+  50% {
     opacity: 0;
   }
-  100%{
+
+  100% {
     opacity: 0;
     display: none !important;
   }
 }
 
-.pickAnimation{
+.pickAnimation {
   animation: yellowborder2 1s infinite;
 }
 
-.posPicked{
+.posPicked {
   animation: champpicked 0.7s ease-in-out forwards;
 }
 
@@ -441,4 +443,31 @@ body {
   100% {
     box-shadow: 0px 0px 0.3vh 0.1vh #b99c6a;
   }
+}
+
+.fadeOutMeDiv {
+  animation: fadeoutmediv2 0.5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeoutmediv2 {
+  0% {
+    display: block;
+  }
+  50%{
+    width: 0pt;
+    opacity: 0;
+  }
+  100% {
+    display: none !important;
+    width: 0pt;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.laneSelectorSelected{
+  box-shadow: 0px 0px 0.5vh 0.2vh #b99c6a3b;
+  border-radius: 30%;
+  background-color: #b99c6a3b;
 }

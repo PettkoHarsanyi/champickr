@@ -24,6 +24,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Blood Well",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 650,
             "hpperlevel": 114,
@@ -71,6 +74,9 @@ export const championsJson =
         },
         "tags": ["Mage", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 590,
             "hpperlevel": 96,
@@ -118,6 +124,10 @@ export const championsJson =
         },
         "tags": ["Assassin"],
         "partype": "Energy",
+        "lanes": [
+            "top",
+            "mid",
+        ],
         "stats": {
             "hp": 570,
             "hpperlevel": 119,
@@ -165,6 +175,9 @@ export const championsJson =
         },
         "tags": ["Marksman", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 630,
             "hpperlevel": 104,
@@ -210,8 +223,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Tank", "Support"],
+        "tags": ["Tank", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 685,
             "hpperlevel": 120,
@@ -259,6 +275,10 @@ export const championsJson =
         },
         "tags": ["Tank", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+            "support",
+        ],
         "stats": {
             "hp": 685,
             "hpperlevel": 94,
@@ -304,8 +324,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Mage", "Support"],
+        "tags": ["Mage", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 550,
             "hpperlevel": 92,
@@ -353,6 +376,9 @@ export const championsJson =
         },
         "tags": ["Mage"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 560,
             "hpperlevel": 102,
@@ -400,6 +426,9 @@ export const championsJson =
         },
         "tags": ["Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 580,
             "hpperlevel": 102,
@@ -445,8 +474,14 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Marksman", "Support"],
+        "tags": ["Marksman", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+            "support",
+
+
+        ],
         "stats": {
             "hp": 640,
             "hpperlevel": 101,
@@ -494,6 +529,9 @@ export const championsJson =
         },
         "tags": ["Mage"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 620,
             "hpperlevel": 90,
@@ -541,6 +579,9 @@ export const championsJson =
         },
         "tags": ["Mage", "Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 550,
             "hpperlevel": 119,
@@ -586,8 +627,13 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support", "Mage"],
+        "tags": ["Controller", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+
+
+        ],
         "stats": {
             "hp": 630,
             "hpperlevel": 103,
@@ -635,6 +681,9 @@ export const championsJson =
         },
         "tags": ["Fighter"],
         "partype": "",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 610,
             "hpperlevel": 99,
@@ -682,6 +731,9 @@ export const championsJson =
         },
         "tags": ["Tank", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 633,
             "hpperlevel": 109,
@@ -729,6 +781,9 @@ export const championsJson =
         },
         "tags": ["Mage"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 590,
             "hpperlevel": 102,
@@ -774,8 +829,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support", "Tank"],
+        "tags": ["Controller", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 610,
             "hpperlevel": 112,
@@ -823,6 +881,9 @@ export const championsJson =
         },
         "tags": ["Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 580,
             "hpperlevel": 107,
@@ -870,6 +931,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 646,
             "hpperlevel": 99,
@@ -917,6 +981,9 @@ export const championsJson =
         },
         "tags": ["Mage"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 630,
             "hpperlevel": 104,
@@ -964,6 +1031,9 @@ export const championsJson =
         },
         "tags": ["Tank", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 644,
             "hpperlevel": 94,
@@ -1011,6 +1081,9 @@ export const championsJson =
         },
         "tags": ["Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 588,
             "hpperlevel": 105,
@@ -1058,6 +1131,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 652,
             "hpperlevel": 114,
@@ -1105,6 +1181,10 @@ export const championsJson =
         },
         "tags": ["Fighter", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+            "mid",
+        ],
         "stats": {
             "hp": 640,
             "hpperlevel": 109,
@@ -1152,6 +1232,9 @@ export const championsJson =
         },
         "tags": ["Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 675,
             "hpperlevel": 104,
@@ -1199,6 +1282,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "None",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 613,
             "hpperlevel": 103,
@@ -1246,6 +1332,10 @@ export const championsJson =
         },
         "tags": ["Assassin", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+            "mid",
+        ],
         "stats": {
             "hp": 655,
             "hpperlevel": 99,
@@ -1293,6 +1383,9 @@ export const championsJson =
         },
         "tags": ["Mage", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 650,
             "hpperlevel": 109,
@@ -1340,6 +1433,9 @@ export const championsJson =
         },
         "tags": ["Assassin", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 642,
             "hpperlevel": 98,
@@ -1387,6 +1483,9 @@ export const championsJson =
         },
         "tags": ["Marksman", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 600,
             "hpperlevel": 102,
@@ -1432,8 +1531,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Mage", "Support"],
+        "tags": ["Mage", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 650,
             "hpperlevel": 106,
@@ -1481,6 +1583,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 620,
             "hpperlevel": 99,
@@ -1528,6 +1633,9 @@ export const championsJson =
         },
         "tags": ["Assassin", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 640,
             "hpperlevel": 106,
@@ -1575,6 +1683,9 @@ export const championsJson =
         },
         "tags": ["Tank", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 632,
             "hpperlevel": 126,
@@ -1622,6 +1733,10 @@ export const championsJson =
         },
         "tags": ["Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+            "mid",
+        ],
         "stats": {
             "hp": 600,
             "hpperlevel": 114,
@@ -1669,6 +1784,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "None",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 690,
             "hpperlevel": 98,
@@ -1716,6 +1834,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Rage",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 540,
             "hpperlevel": 79,
@@ -1763,6 +1884,10 @@ export const championsJson =
         },
         "tags": ["Fighter", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+            "jungle",
+        ],
         "stats": {
             "hp": 670,
             "hpperlevel": 109,
@@ -1810,6 +1935,9 @@ export const championsJson =
         },
         "tags": ["Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 625,
             "hpperlevel": 106,
@@ -1857,6 +1985,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 620,
             "hpperlevel": 109,
@@ -1904,6 +2035,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 625,
             "hpperlevel": 99,
@@ -1949,8 +2083,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Mage", "Support"],
+        "tags": ["Mage", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 558,
             "hpperlevel": 101,
@@ -1998,6 +2135,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 656,
             "hpperlevel": 109,
@@ -2045,6 +2185,10 @@ export const championsJson =
         },
         "tags": ["Fighter", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+            "mid",
+        ],
         "stats": {
             "hp": 590,
             "hpperlevel": 124,
@@ -2090,8 +2234,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support", "Mage"],
+        "tags": ["Controller", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 655,
             "hpperlevel": 99,
@@ -2137,8 +2284,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support", "Mage"],
+        "tags": ["Controller", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 570,
             "hpperlevel": 84,
@@ -2186,6 +2336,9 @@ export const championsJson =
         },
         "tags": ["Tank", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 640,
             "hpperlevel": 104,
@@ -2233,6 +2386,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 665,
             "hpperlevel": 100,
@@ -2280,6 +2436,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 590,
             "hpperlevel": 109,
@@ -2327,6 +2486,9 @@ export const championsJson =
         },
         "tags": ["Marksman", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 655,
             "hpperlevel": 107,
@@ -2374,6 +2536,9 @@ export const championsJson =
         },
         "tags": ["Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 630,
             "hpperlevel": 100,
@@ -2421,6 +2586,9 @@ export const championsJson =
         },
         "tags": ["Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 670,
             "hpperlevel": 102,
@@ -2468,6 +2636,9 @@ export const championsJson =
         },
         "tags": ["Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 574,
             "hpperlevel": 114,
@@ -2513,8 +2684,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Mage", "Support"],
+        "tags": ["Mage", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 604,
             "hpperlevel": 109,
@@ -2562,6 +2736,9 @@ export const championsJson =
         },
         "tags": ["Mage"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 620,
             "hpperlevel": 110,
@@ -2609,6 +2786,9 @@ export const championsJson =
         },
         "tags": ["Assassin", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 646,
             "hpperlevel": 119,
@@ -2656,6 +2836,9 @@ export const championsJson =
         },
         "tags": ["Assassin", "Mage"],
         "partype": "None",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 672,
             "hpperlevel": 108,
@@ -2701,8 +2884,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Fighter", "Support"],
+        "tags": ["Fighter", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 670,
             "hpperlevel": 92,
@@ -2750,6 +2936,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 655,
             "hpperlevel": 109,
@@ -2797,6 +2986,9 @@ export const championsJson =
         },
         "tags": ["Mage", "Marksman"],
         "partype": "Energy",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 611,
             "hpperlevel": 98,
@@ -2844,6 +3036,9 @@ export const championsJson =
         },
         "tags": ["Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 643,
             "hpperlevel": 99,
@@ -2891,6 +3086,9 @@ export const championsJson =
         },
         "tags": ["Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 610,
             "hpperlevel": 99,
@@ -2938,6 +3136,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Courage",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 410,
             "hpperlevel": 84,
@@ -2985,6 +3186,9 @@ export const championsJson =
         },
         "tags": ["Marksman", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 635,
             "hpperlevel": 99,
@@ -3032,6 +3236,9 @@ export const championsJson =
         },
         "tags": ["Tank", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 610,
             "hpperlevel": 108,
@@ -3079,6 +3286,9 @@ export const championsJson =
         },
         "tags": ["Assassin", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 598,
             "hpperlevel": 111,
@@ -3126,6 +3336,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Assassin"],
         "partype": "Energy",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 645,
             "hpperlevel": 105,
@@ -3171,8 +3384,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Tank", "Support"],
+        "tags": ["Tank", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 646,
             "hpperlevel": 101,
@@ -3220,6 +3436,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 605,
             "hpperlevel": 105,
@@ -3267,6 +3486,9 @@ export const championsJson =
         },
         "tags": ["Mage"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 620,
             "hpperlevel": 110,
@@ -3314,6 +3536,9 @@ export const championsJson =
         },
         "tags": ["Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 641,
             "hpperlevel": 100,
@@ -3359,8 +3584,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support", "Mage"],
+        "tags": ["Controller", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 595,
             "hpperlevel": 88,
@@ -3406,8 +3634,12 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Mage", "Support"],
+        "tags": ["Mage", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+            "support",
+        ],
         "stats": {
             "hp": 560,
             "hpperlevel": 99,
@@ -3455,6 +3687,9 @@ export const championsJson =
         },
         "tags": ["Tank", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 644,
             "hpperlevel": 104,
@@ -3502,6 +3737,9 @@ export const championsJson =
         },
         "tags": ["Mage", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 580,
             "hpperlevel": 101,
@@ -3549,6 +3787,10 @@ export const championsJson =
         },
         "tags": ["Tank", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+            "support",
+        ],
         "stats": {
             "hp": 635,
             "hpperlevel": 109,
@@ -3596,6 +3838,9 @@ export const championsJson =
         },
         "tags": ["Assassin", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 669,
             "hpperlevel": 100,
@@ -3641,8 +3886,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support"],
+        "tags": ["Controller"],
         "partype": "Mana",
+        "lanes": [
+            "support"
+        ],
         "stats": {
             "hp": 560,
             "hpperlevel": 88,
@@ -3690,6 +3938,9 @@ export const championsJson =
         },
         "tags": ["Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 640,
             "hpperlevel": 103,
@@ -3737,6 +3988,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 610,
             "hpperlevel": 99,
@@ -3784,6 +4038,9 @@ export const championsJson =
         },
         "tags": ["Fighter"],
         "partype": "Shield",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 645,
             "hpperlevel": 104,
@@ -3829,8 +4086,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Mage", "Support"],
+        "tags": ["Mage", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 630,
             "hpperlevel": 104,
@@ -3876,8 +4136,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support", "Mage"],
+        "tags": ["Controller", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 560,
             "hpperlevel": 88,
@@ -3925,6 +4188,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 631,
             "hpperlevel": 104,
@@ -3970,8 +4236,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Tank", "Support"],
+        "tags": ["Tank", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 646,
             "hpperlevel": 100,
@@ -4017,8 +4286,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Mage", "Support"],
+        "tags": ["Mage", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 610,
             "hpperlevel": 104,
@@ -4066,6 +4338,9 @@ export const championsJson =
         },
         "tags": ["Assassin", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 610,
             "hpperlevel": 109,
@@ -4113,6 +4388,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 570,
             "hpperlevel": 101,
@@ -4160,6 +4438,9 @@ export const championsJson =
         },
         "tags": ["Assassin", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 655,
             "hpperlevel": 109,
@@ -4207,6 +4488,9 @@ export const championsJson =
         },
         "tags": ["Tank", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 610,
             "hpperlevel": 90,
@@ -4254,6 +4538,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 645,
             "hpperlevel": 119,
@@ -4299,8 +4586,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Mage", "Support"],
+        "tags": ["Mage", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 600,
             "hpperlevel": 105,
@@ -4348,6 +4638,9 @@ export const championsJson =
         },
         "tags": ["Tank", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 660,
             "hpperlevel": 109,
@@ -4395,6 +4688,11 @@ export const championsJson =
         },
         "tags": ["Fighter", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+            "mid",
+            "support",
+        ],
         "stats": {
             "hp": 650,
             "hpperlevel": 109,
@@ -4442,6 +4740,10 @@ export const championsJson =
         },
         "tags": ["Tank", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+            "jungle",
+        ],
         "stats": {
             "hp": 610,
             "hpperlevel": 104,
@@ -4487,8 +4789,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support", "Assassin"],
+        "tags": ["Controller", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 670,
             "hpperlevel": 104,
@@ -4536,6 +4841,9 @@ export const championsJson =
         },
         "tags": ["Assassin", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 590,
             "hpperlevel": 124,
@@ -4583,6 +4891,9 @@ export const championsJson =
         },
         "tags": ["Marksman", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 603,
             "hpperlevel": 99,
@@ -4628,8 +4939,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support"],
+        "tags": ["Controller"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 610,
             "hpperlevel": 99,
@@ -4677,6 +4991,9 @@ export const championsJson =
         },
         "tags": ["Tank", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 675,
             "hpperlevel": 94,
@@ -4724,6 +5041,9 @@ export const championsJson =
         },
         "tags": ["Fighter"],
         "partype": "Rage",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 640,
             "hpperlevel": 99,
@@ -4769,8 +5089,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Tank", "Support"],
+        "tags": ["Tank", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 610,
             "hpperlevel": 104,
@@ -4816,8 +5139,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support", "Mage"],
+        "tags": ["Controller", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 545,
             "hpperlevel": 94,
@@ -4865,6 +5191,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Fury",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 660,
             "hpperlevel": 111,
@@ -4912,6 +5241,9 @@ export const championsJson =
         },
         "tags": ["Assassin", "Fighter"],
         "partype": "Ferocity",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 620,
             "hpperlevel": 104,
@@ -4959,6 +5291,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Assassin"],
         "partype": "None",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 630,
             "hpperlevel": 100,
@@ -5006,6 +5341,10 @@ export const championsJson =
         },
         "tags": ["Fighter", "Mage"],
         "partype": "Heat",
+        "lanes": [
+            "top",
+            "mid",
+        ],
         "stats": {
             "hp": 659,
             "hpperlevel": 99,
@@ -5053,6 +5392,9 @@ export const championsJson =
         },
         "tags": ["Mage", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 645,
             "hpperlevel": 124,
@@ -5100,6 +5442,9 @@ export const championsJson =
         },
         "tags": ["Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 600,
             "hpperlevel": 108,
@@ -5147,6 +5492,9 @@ export const championsJson =
         },
         "tags": ["Tank", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 630,
             "hpperlevel": 114,
@@ -5192,8 +5540,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Marksman", "Support"],
+        "tags": ["Marksman", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 530,
             "hpperlevel": 89,
@@ -5239,8 +5590,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Mage", "Support"],
+        "tags": ["Mage", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 570,
             "hpperlevel": 104,
@@ -5288,6 +5642,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Grit",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 670,
             "hpperlevel": 114,
@@ -5335,6 +5692,9 @@ export const championsJson =
         },
         "tags": ["Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 630,
             "hpperlevel": 99,
@@ -5382,6 +5742,9 @@ export const championsJson =
         },
         "tags": ["Tank"],
         "partype": "Energy",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 610,
             "hpperlevel": 99,
@@ -5429,6 +5792,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Fury",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 665,
             "hpperlevel": 109,
@@ -5476,6 +5842,9 @@ export const championsJson =
         },
         "tags": ["Tank", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 650,
             "hpperlevel": 99,
@@ -5523,6 +5892,9 @@ export const championsJson =
         },
         "tags": ["Tank", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 655,
             "hpperlevel": 87,
@@ -5570,6 +5942,9 @@ export const championsJson =
         },
         "tags": ["Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 600,
             "hpperlevel": 104,
@@ -5617,6 +5992,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 650,
             "hpperlevel": 99,
@@ -5662,8 +6040,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support", "Mage"],
+        "tags": ["Controller", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 550,
             "hpperlevel": 91,
@@ -5709,8 +6090,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support", "Mage"],
+        "tags": ["Controller", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 605,
             "hpperlevel": 88,
@@ -5758,6 +6142,9 @@ export const championsJson =
         },
         "tags": ["Mage", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 595,
             "hpperlevel": 99,
@@ -5805,6 +6192,10 @@ export const championsJson =
         },
         "tags": ["Mage", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+            "mid",
+        ],
         "stats": {
             "hp": 575,
             "hpperlevel": 129,
@@ -5852,6 +6243,9 @@ export const championsJson =
         },
         "tags": ["Mage"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 563,
             "hpperlevel": 104,
@@ -5897,8 +6291,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support", "Tank"],
+        "tags": ["Controller", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 640,
             "hpperlevel": 103,
@@ -5944,8 +6341,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Mage", "Support"],
+        "tags": ["Mage", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 550,
             "hpperlevel": 104,
@@ -5993,6 +6393,9 @@ export const championsJson =
         },
         "tags": ["Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 658,
             "hpperlevel": 109,
@@ -6038,8 +6441,12 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support", "Fighter"],
+        "tags": ["Controller", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+
+            "support",
+        ],
         "stats": {
             "hp": 645,
             "hpperlevel": 99,
@@ -6087,6 +6494,9 @@ export const championsJson =
         },
         "tags": ["Marksman", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 598,
             "hpperlevel": 104,
@@ -6132,8 +6542,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support", "Fighter"],
+        "tags": ["Controller", "Fighter"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 600,
             "hpperlevel": 120,
@@ -6181,6 +6594,9 @@ export const championsJson =
         },
         "tags": ["Marksman", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 670,
             "hpperlevel": 102,
@@ -6228,6 +6644,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 686,
             "hpperlevel": 110,
@@ -6275,6 +6694,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Assassin"],
         "partype": "Fury",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 696,
             "hpperlevel": 115,
@@ -6322,6 +6744,9 @@ export const championsJson =
         },
         "tags": ["Mage"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 604,
             "hpperlevel": 108,
@@ -6369,6 +6794,10 @@ export const championsJson =
         },
         "tags": ["Marksman", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+            "support",
+        ],
         "stats": {
             "hp": 682,
             "hpperlevel": 100,
@@ -6416,6 +6845,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 664,
             "hpperlevel": 92,
@@ -6463,6 +6895,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 655,
             "hpperlevel": 102,
@@ -6510,6 +6945,9 @@ export const championsJson =
         },
         "tags": ["Marksman", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 600,
             "hpperlevel": 105,
@@ -6557,6 +6995,9 @@ export const championsJson =
         },
         "tags": ["Marksman", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 550,
             "hpperlevel": 103,
@@ -6604,6 +7045,9 @@ export const championsJson =
         },
         "tags": ["Mage"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 550,
             "hpperlevel": 108,
@@ -6651,6 +7095,9 @@ export const championsJson =
         },
         "tags": ["Mage"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 590,
             "hpperlevel": 102,
@@ -6698,6 +7145,9 @@ export const championsJson =
         },
         "tags": ["Mage"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 590,
             "hpperlevel": 104,
@@ -6745,6 +7195,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 655,
             "hpperlevel": 99,
@@ -6792,6 +7245,9 @@ export const championsJson =
         },
         "tags": ["Assassin", "Fighter"],
         "partype": "None",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 630,
             "hpperlevel": 109,
@@ -6839,6 +7295,9 @@ export const championsJson =
         },
         "tags": ["Mage"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 600,
             "hpperlevel": 104,
@@ -6886,6 +7345,9 @@ export const championsJson =
         },
         "tags": ["Mage"],
         "partype": "Crimson Rush",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 607,
             "hpperlevel": 110,
@@ -6933,6 +7395,10 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+            "jungle",
+        ],
         "stats": {
             "hp": 650,
             "hpperlevel": 104,
@@ -6980,6 +7446,10 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+            "jungle",
+        ],
         "stats": {
             "hp": 620,
             "hpperlevel": 99,
@@ -7027,6 +7497,9 @@ export const championsJson =
         },
         "tags": ["Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 660,
             "hpperlevel": 102,
@@ -7074,6 +7547,9 @@ export const championsJson =
         },
         "tags": ["Mage"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 596,
             "hpperlevel": 106,
@@ -7121,6 +7597,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Assassin"],
         "partype": "Mana",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 640,
             "hpperlevel": 106,
@@ -7168,6 +7647,10 @@ export const championsJson =
         },
         "tags": ["Fighter", "Assassin"],
         "partype": "Flow",
+        "lanes": [
+            "top",
+            "mid",
+        ],
         "stats": {
             "hp": 590,
             "hpperlevel": 101,
@@ -7215,6 +7698,10 @@ export const championsJson =
         },
         "tags": ["Assassin", "Fighter"],
         "partype": "Flow",
+        "lanes": [
+            "top",
+            "mid",
+        ],
         "stats": {
             "hp": 620,
             "hpperlevel": 99,
@@ -7262,6 +7749,9 @@ export const championsJson =
         },
         "tags": ["Fighter", "Tank"],
         "partype": "Mana",
+        "lanes": [
+            "top",
+        ],
         "stats": {
             "hp": 650,
             "hpperlevel": 114,
@@ -7307,8 +7797,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support", "Mage"],
+        "tags": ["Controller", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 500,
             "hpperlevel": 69,
@@ -7356,6 +7849,9 @@ export const championsJson =
         },
         "tags": ["Tank", "Fighter"],
         "partype": "None",
+        "lanes": [
+            "jungle",
+        ],
         "stats": {
             "hp": 685,
             "hpperlevel": 109,
@@ -7403,6 +7899,10 @@ export const championsJson =
         },
         "tags": ["Assassin"],
         "partype": "Energy",
+        "lanes": [
+            "jungle",
+            "mid",
+        ],
         "stats": {
             "hp": 654,
             "hpperlevel": 99,
@@ -7450,6 +7950,9 @@ export const championsJson =
         },
         "tags": ["Marksman"],
         "partype": "Mana",
+        "lanes": [
+            "bottom",
+        ],
         "stats": {
             "hp": 630,
             "hpperlevel": 110,
@@ -7497,6 +8000,9 @@ export const championsJson =
         },
         "tags": ["Mage"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 606,
             "hpperlevel": 106,
@@ -7542,8 +8048,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Support", "Mage"],
+        "tags": ["Controller", "Mage"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 574,
             "hpperlevel": 96,
@@ -7589,8 +8098,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Mage", "Support"],
+        "tags": ["Mage", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "mid",
+        ],
         "stats": {
             "hp": 630,
             "hpperlevel": 106,
@@ -7636,8 +8148,11 @@ export const championsJson =
             "w": 48,
             "h": 48
         },
-        "tags": ["Mage", "Support"],
+        "tags": ["Mage", "Controller"],
         "partype": "Mana",
+        "lanes": [
+            "support",
+        ],
         "stats": {
             "hp": 574,
             "hpperlevel": 93,

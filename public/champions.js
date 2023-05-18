@@ -6996,6 +6996,7 @@ export const championsJson =
         "tags": ["Marksman", "Assassin"],
         "partype": "Mana",
         "lanes": [
+            "top",
             "bottom",
         ],
         "stats": {

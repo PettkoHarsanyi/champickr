@@ -6,26 +6,26 @@ export const classes = {
   "tank": {
     "name": "tank",
     "counter": ["fighter", "marksman"],
-    "strongAgainst": ["slayer", "mage"],
+    "strongAgainst": ["assassin", "mage"],
   },
-  "slayer": {
-    "name": "slayer",
+  "assassin": {
+    "name": "assassin",
     "counter": ["tank", "fighter"],
     "strongAgainst": ["mage", "marksman"],
   },
   "mage": {
     "name": "mage",
-    "counter": ["slayer", "tank"],
+    "counter": ["assassin", "tank"],
     "strongAgainst": ["marksman", "fighter"],
   },
   "marksman": {
     "name": "marksman",
-    "counter": ["mage", "slayer"],
+    "counter": ["mage", "assassin"],
     "strongAgainst": ["fighter", "tank"]
   },
   "fighter": {
     "name": "fighter",
     "counter": ["marksman", "mage"],
-    "strongAgainst": ["tank", "slayer"]
+    "strongAgainst": ["tank", "assassin"]
   },
 }

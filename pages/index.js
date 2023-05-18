@@ -18,6 +18,7 @@ import tank from "../public/classes/tank.webp"
 import { championsJson } from "../public/champions.js"
 import { playersJson } from "../public/players.js"
 import { classes } from "../public/classes.js"
+import {RxCrossCircled} from "react-icons/rx"
 
 const inter = Inter({
   subsets: ['latin'],
@@ -35,7 +36,7 @@ export default function Home() {
   const [champSelect, setChampSelect] = useState(Object.values(championsJson));
   const [selectedPlayer, setSelectedPlayer] = useState({ "player": "", "team": "" });
   const [classSelector, setClassSelector] = useState([]);
-  const [laneSelector, setLaneSelector] = useState([]);
+  const [laneSelector, setLaneSelector] = useState("");
 
   const [positionPics] = useState([{ "pos": top, "name": "top" }, { "pos": jungle, "name": "jungle" }, { "pos": mid, "name": "mid" }, { "pos": bottom, "name": "bottom" }, { "pos": support, "name": "support" }]);
 
@@ -135,12 +136,10 @@ export default function Home() {
     setSelectedPlayer({ player: _player, team: _team });
   }
 
-
-
-  const handleInput = (event) => {
+  const filterChampName = (name) => {
     setChampSelect(Object.values(champions).filter((champ) =>
-      champ.id.toUpperCase().includes(event.target.value.toUpperCase())
-    ))
+    champ.id.toUpperCase().includes(name.toUpperCase())
+  ))
   }
 
   const handlePick = (_champion) => {
@@ -162,6 +161,8 @@ export default function Home() {
     lastPicked.closest(".champrow").classList.remove("champrowselected");
     lastPicked.classList.add("picshadowPicked");
     lastPicked.previousElementSibling.classList.add("champpicPicked")
+    setLaneSelector("");
+    setClassSelector([]);
   }
 
   const [lockedDiv, setLockedDiv] = useState(null);
@@ -258,10 +259,10 @@ export default function Home() {
 
   const handleSelectLane = (lane) => {
     setLaneSelector(() => {
-      if (laneSelector.includes(lane)) {
-        return laneSelector.filter((_lane) => lane != _lane)
+      if (laneSelector == lane) {
+        return ""
       }
-      return [...laneSelector, lane]
+      return lane;
     })
   }
 
@@ -275,10 +276,32 @@ export default function Home() {
   }
 
   useEffect(() => {
-    setChampSelect(Object.values(champions).filter((champ) => {
-      return true;
-    }))
+    filterSelection();
   }, [classSelector, laneSelector])
+
+  const filterSelection = () => {
+    if (laneSelector == "" && classSelector.length == 0) {
+      setChampSelect(Object.values(champions));
+    } else {
+      if (laneSelector == "") {
+        setChampSelect(
+          Object.values(champions).filter(champ => {
+            return classSelector.every(cls => champ.tags.includes(cls));
+          })
+        )
+      }
+      else {
+
+        setChampSelect(
+          Object.values(champions).filter((champ) => {
+            return champ.lanes.includes(laneSelector);
+          }).filter(champ => {
+            return classSelector.every(cls => champ.tags.includes(cls));
+          })
+        )
+      }
+    }
+  }
 
   useEffect(() => {
     players.forEach
@@ -374,27 +397,30 @@ export default function Home() {
               </div>
             </div>
             <div id='selector' className='absolute h-[90%] border border-red-800 left-0 right-0 m-auto selector'>
-              <div className='searchbar flex flex-row justify-between align-middle'>
-                <input onChange={handleInput} id="inputname" type='text' placeholder='Start typing...' className='w-4/5 inputfield' style={{ flex: 1 }} autoFocus />
-                <div style={{ width: "50px", margin: "2vh" }}>
+              <div className='searchbar flex flex-row justify-between align-middle items-center'>
+                <input onChange={(event)=>{filterChampName(event.target.value)}} id="inputname" type='text' placeholder='Start typing...' className='w-4/5 inputfield' style={{ flex: 1 }} autoFocus />
+                <div style={{ width: "30px", margin: "2vh" }}>
                   <Image src={magn} alt='magnifyer' />
+                </div>
+                <div className='cursor-pointer' onClick={()=>{filterChampName("");document.getElementById("inputname").value="";setLaneSelector("");setClassSelector([])}}>
+                  <RxCrossCircled className='text-6xl'/>
                 </div>
               </div>
               <div className='h-[20%] flex flex-col justify-evenly items-center'>
-                <div className='border-[#b99c6a] border rounded-full flex flex-row gap-3 p-2 overflow-hidden'>
+                <div className='border-[#b99c6a] border rounded-full flex flex-row gap-3 p-2 overflow-hidden w-[50%] justify-center'>
+                  <Image src={tank} alt="tank" width={30} className={classSelector.includes("Tank") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("Tank") }} />
+                  <Image src={fighter} alt="fighter" width={30} className={classSelector.includes("Fighter") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("Fighter") }} />
+                  <Image src={mage} alt="mage" width={30} className={classSelector.includes("Mage") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("Mage") }} />
+                  <Image src={slayer} alt="slayer" width={30} className={classSelector.includes("Assassin") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("Assassin") }} />
+                  <Image src={marksman} alt="marksman" width={30} className={classSelector.includes("Marksman") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("Marksman") }} />
+                  <Image src={controller} alt="controller" width={30} className={classSelector.includes("Controller") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("Controller") }} />
+                </div>
+                <div className='border-[#b99c6a] border rounded-full flex flex-row gap-3 p-2 overflow-hidden w-[40%] justify-center'>
                   <Image src={top} alt="top" width={30} className={laneSelector.includes("top") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectLane("top") }} />
                   <Image src={jungle} alt="jungle" width={30} className={laneSelector.includes("jungle") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectLane("jungle") }} />
                   <Image src={mid} alt="mid" width={30} className={laneSelector.includes("mid") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectLane("mid") }} />
                   <Image src={bottom} alt="bottom" width={30} className={laneSelector.includes("bottom") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectLane("bottom") }} />
                   <Image src={support} alt="support" width={30} className={laneSelector.includes("support") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectLane("support") }} />
-                </div>
-                <div className='border-[#b99c6a] border rounded-full flex flex-row gap-3 p-2'>
-                  <Image src={tank} alt="tank" width={30} className={classSelector.includes("tank") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("tank") }} />
-                  <Image src={fighter} alt="fighter" width={30} className={classSelector.includes("fighter") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("fighter") }} />
-                  <Image src={mage} alt="mage" width={30} className={classSelector.includes("mage") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("mage") }} />
-                  <Image src={slayer} alt="slayer" width={30} className={classSelector.includes("slayer") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("slayer") }} />
-                  <Image src={marksman} alt="marksman" width={30} className={classSelector.includes("marksman") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("marksman") }} />
-                  <Image src={controller} alt="controller" width={30} className={classSelector.includes("controller") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("controller") }} />
                 </div>
               </div>
               <div className='champlist container m-auto'>

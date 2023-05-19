@@ -18,7 +18,16 @@ import tank from "../public/classes/tank.webp"
 import { championsJson } from "../public/champions.js"
 import { playersJson } from "../public/players.js"
 import { classes } from "../public/classes.js"
-import {RxCrossCircled} from "react-icons/rx"
+import { RxCrossCircled } from "react-icons/rx"
+import ashe from "../public/champs/Ashe.png"
+import ahri from "../public/champs/Ahri.png"
+import amumu from "../public/champs/Amumu.png"
+import garen from "../public/champs/Garen.png"
+import riven from "../public/champs/Riven.png"
+import vayne from "../public/champs/Vayne.png"
+import yasuo from "../public/champs/Yasuo.png"
+import zac from "../public/champs/Zac.png"
+import zed from "../public/champs/Zed.png"
 
 const inter = Inter({
   subsets: ['latin'],
@@ -39,9 +48,10 @@ export default function Home() {
   const [laneSelector, setLaneSelector] = useState("");
 
   const [positionPics] = useState([{ "pos": top, "name": "top" }, { "pos": jungle, "name": "jungle" }, { "pos": mid, "name": "mid" }, { "pos": bottom, "name": "bottom" }, { "pos": support, "name": "support" }]);
+  const [champpics] = useState([ashe, ahri, amumu, garen, riven, vayne, yasuo, zac, zed])
 
   const posToPics = { "top": top, "jungle": jungle, "mid": mid, "bottom": bottom, "support": support }
-  const posToCSSPOS = { "top": 0, "jungle": "-100%", "mid": "-200%", "bottom": "-300%", "support": "-400%" }
+  const classToPics = { "Tank": tank, "Controller": controller, "Fighter": fighter, "Mage": mage, "Assassin": slayer, "Marksman": marksman }
 
   const [players, setPlayers] = useState(playersJson)
 
@@ -65,10 +75,68 @@ export default function Home() {
       setIndex(index => (Math.floor(Math.random() * 152)));
     }, 150)
 
+
+    players.forEach(player => {
+      modifyPlayer(player.key, calculateClassProb(player))
+    })
+
     return () => {
       clearInterval(interval)
     };
   }, [])
+
+  const calculateClassProb = (player, _pos) => {
+    let pos;
+    if (_pos) {
+      pos = _pos;
+    } else {
+      if (player.posPicked) {
+        pos = player.pos;
+      } else {
+        pos = player.primPos;
+      }
+    }
+
+    let classesOnPos = [];
+
+    Object.values(champions).forEach((champion) => {
+      if (champion.lanes.includes(pos)) {
+        champion.tags.forEach((cls) => {
+          if (classesOnPos.every(alrdClass => { return alrdClass.name !== cls })) {
+            classesOnPos.push({ "name": cls, "count": 1 })
+          } else {
+            classesOnPos = classesOnPos.map(alrdClass => {
+              if (alrdClass.name === cls) {
+                return {
+                  ...alrdClass,
+                  "count": alrdClass.count + 1,
+                }
+              } else {
+                return alrdClass;
+              }
+            })
+          }
+        })
+      }
+    })
+
+
+    classesOnPos.sort((a, b) => { return b.count - a.count });
+
+    const champsOnLane = classesOnPos.reduce((a, b) => a + b.count, 0);
+
+    return {
+      "classProb": [
+        { "class": classesOnPos[0].name, "prob": classesOnPos[0].count / champsOnLane * 100 },
+        { "class": classesOnPos[1].name, "prob": classesOnPos[1].count / champsOnLane * 100 },
+        { "class": classesOnPos[2].name, "prob": classesOnPos[2].count / champsOnLane * 100 },
+      ]
+    }
+  }
+
+  useEffect(() => {
+    console.log(players);
+  }, [players])
 
   const selectFirstPlayer = () => {
     const circle = document.getElementById("circle");
@@ -138,8 +206,8 @@ export default function Home() {
 
   const filterChampName = (name) => {
     setChampSelect(Object.values(champions).filter((champ) =>
-    champ.id.toUpperCase().includes(name.toUpperCase())
-  ))
+      champ.id.toUpperCase().includes(name.toUpperCase())
+    ))
   }
 
   const handlePick = (_champion) => {
@@ -148,15 +216,7 @@ export default function Home() {
     const input = document.getElementById("inputname");
     input.value = "";
 
-    setPlayers({
-      ...players, [selectedPlayer.team]: {
-        ...players[selectedPlayer.team], [selectedPlayer.player]: {
-          ...players[selectedPlayer.team][selectedPlayer.player],
-          champion: _champion,
-          isPicked: true,
-        }
-      }
-    })
+    modifyPlayer(selectedPlayer.player, { "champion": _champion, "isPicked": true })
 
     lastPicked.closest(".champrow").classList.remove("champrowselected");
     lastPicked.classList.add("picshadowPicked");
@@ -167,17 +227,7 @@ export default function Home() {
 
   const [lockedDiv, setLockedDiv] = useState(null);
 
-  const handlePickPos = (_pos, _player, _team, playerIndex) => {
-    setPlayers({
-      ...players, [_team]: {
-        ...players[_team], [_player]: {
-          ...players[_team][_player],
-          pos: _pos.name,
-          posPicked: true,
-        }
-      }
-    })
-
+  const handlePickPos = async (_pos, _player, playerIndex) => {
 
     const posDiv = document.getElementById("posplayer" + playerIndex);
     posDiv.style.width = "100%"
@@ -194,6 +244,9 @@ export default function Home() {
     setTimeout(() => {
       setLockedDiv(null);
     }, 500)
+
+    modifyPlayer(_player, { "posPicked": true, "pos": _pos.name, ...calculateClassProb(_player,_pos.name) })
+
   }
 
 
@@ -219,9 +272,6 @@ export default function Home() {
         result[item] = 1;
       }
     }
-
-
-    console.log(result);
   }
 
   useEffect(() => {
@@ -229,15 +279,17 @@ export default function Home() {
   }, [])
 
 
-  const modifyPlayer = (_team, _player, _modifyable, _value) => {
-    setPlayers({
-      ...players, [_team]: {
-        ...players[_team], [_player]: {
-          ...players[_team][_player],
-          [_modifyable]: _value,
+  const modifyPlayer = (_player, _modificationObj) => {
+    setPlayers((players) => players.map(player => {
+      if (player.key == _player) {
+        return {
+          ...player,
+          ..._modificationObj
         }
+      } else {
+        return player
       }
-    })
+    }))
   }
 
   const handlePickSelf = (playerName, playerIndex) => {
@@ -247,14 +299,14 @@ export default function Home() {
     }
     const clickedMeDiv = document.getElementById("leftpicshadow" + (playerIndex + 1));
 
-    if (lastPicked.isSameNode(clickedMeDiv)) {
+    if (lastPicked !== null && lastPicked.isSameNode(clickedMeDiv)) {
       lastPicked.closest(".champrow").classList.remove("champrowselected");
       const selectorDiv = document.getElementById("selector");
       selectorDiv.classList.remove("selectorFull")
       setLastPicked(null);
     }
 
-    modifyPlayer("blue", playerName, "self", true);
+    modifyPlayer(playerName, { "self": true });
   }
 
   const handleSelectLane = (lane) => {
@@ -303,11 +355,6 @@ export default function Home() {
     }
   }
 
-  useEffect(() => {
-    players.forEach
-    console.log("Változás")
-  }, [players])
-
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between ${inter.className}`}
@@ -315,77 +362,89 @@ export default function Home() {
       <div id='mainDiv' className="z-9 w-full h-screen items-center font-mono font-beaufort align-middle justify-center text-center  mainDiv">
         <div id='titlediv' className='h-2/6 px-10'>
           <div style={{ fontSize: "8vh" }}>CHAMPICKR</div>
-          <div>Calculate the class and subclass of the champion you have the best winning chance with, based on the enemy dominating class.</div>
+          <div>Calculate the class and subclass of the champion you have the best winning chance with, based on the enemy uncountered dominating class.</div>
         </div>
 
 
         <div id="championselect" className={`flex flex-row w-full championselect`}>
 
           <div className={`w-[30%] flex flex-col champRows`}>
-            {Object.values(players.blue).map((player, playerIndex) => {
-              return (
-                <div className='flex flex-row h-1/5 align-middle items-center gap-5' key={playerIndex}>
-                  <div className='w-[15%] cursor-pointer opacity-30 hover:opacity-100 text-gray-400 hover:text-green-600 transition-all selfpicker' onClick={() => handlePickSelf(player.key, playerIndex)}>me</div>
-                  <div id={`leftchamprow${playerIndex + 1}`} className={`grborder${playerIndex + 1} grow h-full flex flex-row p-3 gap-3 items-center champrow champrowleft transition-all`} >
-                    <div className='h-full aspect-square relative flex items-center justify-center' style={{ border: "0.2vh solid #b99c6a" }}>
-                      {
-                        !player.self ?
-                          <>
-                            <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (PICLINK + Object.values(champions)[(index + playerIndex) % Object.keys(champions).length].image.full)} fill sizes='50px' alt='champ' />
-                            <div id={`leftpicshadow${playerIndex + 1}`} className='picshadow' onClick={(event) => selectPlayer(event, player.key, "blue")}></div>
-                          </>
-                          :
-                          <div>YOU</div>
-                      }
-                    </div>
-                    <div className='h-3/4 aspect-square relative'  >
-                      <div id={`posplayer${playerIndex}`} className='rounded-full absolute left-0 pickAnimation' style={{ height: "100%", width: "100%", border: "0.2vh solid #b99c6a", transition: "all 0.5s, opacity 1s", minWidth: "100%", overflow: "hidden", zIndex: "50" }}
-                        onMouseOver={(event) => {
-                          const posDiv = document.getElementById("posplayer" + playerIndex);
-                          if (lockedDiv !== null && lockedDiv.isSameNode(posDiv)) {
-                            return;
-                          }
-                          posDiv.style.width = "500%"
-                          posDiv.style.backgroundColor = "#010a13"
-                          const innerPosDiv = document.getElementById("innerpos" + playerIndex);
-                          innerPosDiv.style.right = 0;
-                          innerPosDiv.style.opacity = 1;
-                          const frontDiv = document.getElementById("frontDiv" + playerIndex);
-                          frontDiv.classList.remove("frontDivAnimBackward")
-                          frontDiv.classList.add("frontDivAnimForward");
-                        }} onMouseLeave={(event) => {
-                          const posDiv = document.getElementById("posplayer" + playerIndex);
-                          posDiv.style.width = "100%"
-                          posDiv.style.backgroundColor = "transparent"
-                          const innerPosDiv = document.getElementById("innerpos" + playerIndex);
-                          innerPosDiv.style.right = 0;
-                          innerPosDiv.style.opacity = 0;
-                          const frontDiv = document.getElementById("frontDiv" + playerIndex);
-                          frontDiv.classList.remove("frontDivAnimForward")
-                          frontDiv.classList.add("frontDivAnimBackward");
-                        }}
-                      >
-                        <div id={`innerpos${playerIndex}`} style={{ position: "relative", transition: "0.5s all", opacity: 0, width: "100%", right: 0 }} className='h-full flex flex-row justify-between'>
-                          {positionPics.map((pos, index) => {
-                            return (
-                              <div className='h-full aspect-square pos' style={{ padding: "1vh", cursor: "pointer", display: "inline-block" }} onClick={() => { handlePickPos(pos, player.key, "blue", playerIndex) }} key={index}>
-                                <Image src={pos.pos} alt='position' />
-                              </div>
-                            )
-                          })}
+            {players.map((player, playerIndex) => {
+              if (player.team == "blue") {
+                return (
+                  <div className='flex flex-row h-1/5 align-middle items-center gap-5' key={playerIndex}>
+                    <div className='w-[15%] cursor-pointer opacity-30 hover:opacity-100 text-gray-400 hover:text-green-600 transition-all selfpicker' onClick={() => handlePickSelf(player.key, playerIndex)}>me</div>
+                    <div id={`leftchamprow${playerIndex + 1}`} className={`grborder${playerIndex + 1} grow h-full flex flex-row p-3 gap-3 items-center champrow champrowleft transition-all`} >
+                      <div className='h-full aspect-square relative flex items-center justify-center' style={{ border: "0.2vh solid #b99c6a" }}>
+                        {
+                          !player.self ?
+                            <>
+                              <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (champpics[(index + playerIndex) % champpics.length])} fill sizes='50px' alt='champ' />
+                              <div id={`leftpicshadow${playerIndex + 1}`} className='picshadow' onClick={(event) => selectPlayer(event, player.key, "blue")}></div>
+                            </>
+                            :
+                            <div>YOU</div>
+                        }
+                      </div>
+                      <div className='h-3/4 aspect-square relative'  >
+                        <div id={`posplayer${playerIndex}`} className='rounded-full absolute left-0 pickAnimation' style={{ height: "100%", width: "100%", border: "0.2vh solid #b99c6a", transition: "all 0.5s, opacity 1s", minWidth: "100%", overflow: "hidden", zIndex: "50" }}
+                          onMouseOver={(event) => {
+                            const posDiv = document.getElementById("posplayer" + playerIndex);
+                            if (lockedDiv !== null && lockedDiv.isSameNode(posDiv)) {
+                              return;
+                            }
+                            posDiv.style.width = "500%"
+                            posDiv.style.backgroundColor = "#010a13"
+                            const innerPosDiv = document.getElementById("innerpos" + playerIndex);
+                            innerPosDiv.style.right = 0;
+                            innerPosDiv.style.opacity = 1;
+                            const frontDiv = document.getElementById("frontDiv" + playerIndex);
+                            frontDiv.classList.remove("frontDivAnimBackward")
+                            frontDiv.classList.add("frontDivAnimForward");
+                          }} onMouseLeave={(event) => {
+                            const posDiv = document.getElementById("posplayer" + playerIndex);
+                            posDiv.style.width = "100%"
+                            posDiv.style.backgroundColor = "transparent"
+                            const innerPosDiv = document.getElementById("innerpos" + playerIndex);
+                            innerPosDiv.style.right = 0;
+                            innerPosDiv.style.opacity = 0;
+                            const frontDiv = document.getElementById("frontDiv" + playerIndex);
+                            frontDiv.classList.remove("frontDivAnimForward")
+                            frontDiv.classList.add("frontDivAnimBackward");
+                          }}
+                        >
+                          <div id={`innerpos${playerIndex}`} style={{ position: "relative", transition: "0.5s all", opacity: 0, width: "100%", right: 0 }} className='h-full flex flex-row justify-between'>
+                            {positionPics.map((pos, index) => {
+                              return (
+                                <div className='h-full aspect-square pos' style={{ padding: "1vh", cursor: "pointer", display: "inline-block" }} onClick={() => { handlePickPos(pos, player.key, playerIndex) }} key={index}>
+                                  <Image src={pos.pos} alt='position' />
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+
+                        <div id={`frontDiv${playerIndex}`} className='absolute left-0 rounded-full h-full w-full flex flex-col justify-between' style={{ zIndex: "52", backgroundColor: "#010a13", border: "0.2vh solid #b99c6a", pointerEvents: "none", transition: "0.5s all" }}>
+                          <Image src={player.pos == "" ? posToPics[player.primPos] : posToPics[player.pos]} alt='position' className={`${player.posPicked ? "h-max p-2" : "h-3/5"} aspect-square`} style={{ objectFit: "contain" }} />
+                          {!player.posPicked && <div className='text-lg h-2/5' style={{ lineHeight: "1" }}>{player.posProb}%</div>}
+
                         </div>
                       </div>
 
-                      <div id={`frontDiv${playerIndex}`} className='absolute left-0 rounded-full h-full w-full flex flex-col justify-between' style={{ zIndex: "52", backgroundColor: "#010a13", border: "0.2vh solid #b99c6a", pointerEvents: "none", transition: "0.5s all" }}>
-                        <Image src={player.pos == "" ? posToPics[player.primPos] : posToPics[player.pos]} alt='position' className={`${player.posPicked ? "h-max p-2" : "h-3/5"} aspect-square`} style={{ objectFit: "contain" }} />
-                        {!player.posPicked && <div className='text-lg h-2/5' style={{ lineHeight: "1" }}>{player.posProb}%</div>}
-
+                      <div className='flex-1 h-max flex flex-row items-center overflow-hidden gap-3'>
+                        {player.classProb.length > 0 && player.classProb.map((cls, index) => {
+                          return (<div className='flex flex-col' key={index}>
+                            <Image src={classToPics[cls.class]} height={30} className='object-contain aspect-square' alt='pos' />
+                            <div className='text-sm'>{Math.floor(cls.prob)}%</div>
+                          </div>)
+                        })}
                       </div>
-                    </div>
 
+                    </div>
                   </div>
-                </div>
-              )
+                )
+
+              }
             })}
           </div>
 
@@ -398,29 +457,29 @@ export default function Home() {
             </div>
             <div id='selector' className='absolute h-[90%] border border-red-800 left-0 right-0 m-auto selector'>
               <div className='searchbar flex flex-row justify-between align-middle items-center'>
-                <input onChange={(event)=>{filterChampName(event.target.value)}} id="inputname" type='text' placeholder='Start typing...' className='w-4/5 inputfield' style={{ flex: 1 }} autoFocus />
+                <input onChange={(event) => { filterChampName(event.target.value) }} id="inputname" type='text' placeholder='Start typing...' className='w-4/5 inputfield' style={{ flex: 1 }} autoFocus />
                 <div style={{ width: "30px", margin: "2vh" }}>
                   <Image src={magn} alt='magnifyer' />
                 </div>
-                <div className='cursor-pointer' onClick={()=>{filterChampName("");document.getElementById("inputname").value="";setLaneSelector("");setClassSelector([])}}>
-                  <RxCrossCircled className='text-6xl'/>
+                <div className='cursor-pointer' onClick={() => { filterChampName(""); document.getElementById("inputname").value = ""; setLaneSelector(""); setClassSelector([]) }}>
+                  <RxCrossCircled className='text-6xl' />
                 </div>
               </div>
               <div className='h-[20%] flex flex-col justify-evenly items-center'>
                 <div className='border-[#b99c6a] border rounded-full flex flex-row gap-3 p-2 overflow-hidden w-[50%] justify-center'>
-                  <Image src={tank} alt="tank" width={30} className={classSelector.includes("Tank") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("Tank") }} />
-                  <Image src={fighter} alt="fighter" width={30} className={classSelector.includes("Fighter") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("Fighter") }} />
-                  <Image src={mage} alt="mage" width={30} className={classSelector.includes("Mage") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("Mage") }} />
-                  <Image src={slayer} alt="slayer" width={30} className={classSelector.includes("Assassin") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("Assassin") }} />
-                  <Image src={marksman} alt="marksman" width={30} className={classSelector.includes("Marksman") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("Marksman") }} />
-                  <Image src={controller} alt="controller" width={30} className={classSelector.includes("Controller") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectClass("Controller") }} />
+                  <Image src={tank} alt="tank" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classSelector.includes("Tank") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectClass("Tank") }} />
+                  <Image src={fighter} alt="fighter" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classSelector.includes("Fighter") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectClass("Fighter") }} />
+                  <Image src={mage} alt="mage" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classSelector.includes("Mage") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectClass("Mage") }} />
+                  <Image src={slayer} alt="slayer" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classSelector.includes("Assassin") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectClass("Assassin") }} />
+                  <Image src={marksman} alt="marksman" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classSelector.includes("Marksman") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectClass("Marksman") }} />
+                  <Image src={controller} alt="controller" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classSelector.includes("Controller") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectClass("Controller") }} />
                 </div>
                 <div className='border-[#b99c6a] border rounded-full flex flex-row gap-3 p-2 overflow-hidden w-[40%] justify-center'>
-                  <Image src={top} alt="top" width={30} className={laneSelector.includes("top") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectLane("top") }} />
-                  <Image src={jungle} alt="jungle" width={30} className={laneSelector.includes("jungle") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectLane("jungle") }} />
-                  <Image src={mid} alt="mid" width={30} className={laneSelector.includes("mid") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectLane("mid") }} />
-                  <Image src={bottom} alt="bottom" width={30} className={laneSelector.includes("bottom") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectLane("bottom") }} />
-                  <Image src={support} alt="support" width={30} className={laneSelector.includes("support") ? "laneSelectorSelected" : ""} onClick={() => { handleSelectLane("support") }} />
+                  <Image src={top} alt="top" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={laneSelector.includes("top") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectLane("top") }} />
+                  <Image src={jungle} alt="jungle" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={laneSelector.includes("jungle") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectLane("jungle") }} />
+                  <Image src={mid} alt="mid" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={laneSelector.includes("mid") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectLane("mid") }} />
+                  <Image src={bottom} alt="bottom" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={laneSelector.includes("bottom") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectLane("bottom") }} />
+                  <Image src={support} alt="support" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={laneSelector.includes("support") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectLane("support") }} />
                 </div>
               </div>
               <div className='champlist container m-auto'>
@@ -438,16 +497,73 @@ export default function Home() {
           </div>
 
           <div className='w-[30%] flex flex-col gap-3 champRows'>
-            {Object.values(players.red).map((player, playerIndex) => {
-              return (
-                <div className={`h-1/5 grborder${playerIndex + 6} flex flex-row-reverse p-3 gap-3 items-center champrow champrowright`} key={playerIndex}>
-                  <div className='h-full aspect-square relative' style={{ border: "0.2vh solid #b99c6a" }}>
-                    <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (PICLINK + Object.values(champions)[(index + playerIndex) % Object.keys(champions).length].image.full)} fill sizes='50px' alt='champ' />
-                    <div className='picshadow' onClick={(event) => selectPlayer(event, player.key, "red")}></div>
-                  </div>
-                  <div className='h-3/4 m-5 aspect-square rounded-full' style={{ border: "0.2vh solid #b99c6a" }}></div>
-                </div>
-              )
+            {players.map((player, playerIndex) => {
+              if (player.team == "red") {
+
+                return (
+                  player.team == "red" ?
+                    <div className='flex flex-row h-1/5 align-middle items-center gap-5' key={playerIndex}>
+                      <div id={`rightchamprow${playerIndex + 1}`} className={`grborder${playerIndex + 1} grow h-full flex flex-row-reverse p-3 gap-3 items-center champrow champrowright transition-all`} >
+
+                        <div className='h-full aspect-square relative flex items-center justify-center' style={{ border: "0.2vh solid #b99c6a" }}>
+                          {
+                            !player.self ?
+                              <>
+                                <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (champpics[(index + playerIndex) % champpics.length])} fill sizes='50px' alt='champ' />
+                                <div id={`rightpicshadow${playerIndex + 1}`} className='picshadow' onClick={(event) => selectPlayer(event, player.key, "red")}></div>
+                              </>
+                              :
+                              <div>YOU</div>
+                          }
+                        </div>
+                        <div className='h-3/4 aspect-square relative'  >
+                          <div id={`posplayer${playerIndex}`} className='rounded-full absolute left-0 pickAnimation' style={{ height: "100%", width: "100%", border: "0.2vh solid #b99c6a", transition: "all 0.5s, opacity 1s", minWidth: "100%", overflow: "hidden", zIndex: "50" }}>
+                            <div id={`innerpos${playerIndex}`} style={{ position: "relative", transition: "0.5s all", opacity: 0, width: "100%", right: 0 }} className='h-full flex flex-row justify-between'>
+                              {positionPics.map((pos, index) => {
+                                return (
+                                  <div className='h-full aspect-square pos' style={{ padding: "1vh", cursor: "pointer", display: "inline-block" }} onClick={() => { handlePickPos(pos, player.key, "blue", playerIndex) }} key={index}>
+                                    <Image src={pos.pos} alt='position' />
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          </div>
+
+                          <div id={`frontDiv${playerIndex}`} className='absolute left-0 rounded-full h-full w-full flex flex-col justify-between' style={{ zIndex: "52", backgroundColor: "#010a13", border: "0.2vh solid #b99c6a", pointerEvents: "none", transition: "0.5s all" }}>
+                            <Image src={player.pos == "" ? posToPics[player.primPos] : posToPics[player.pos]} alt='position' className={`${player.posPicked ? "h-max p-2" : "h-3/5"} aspect-square`} style={{ objectFit: "contain" }} />
+                            {!player.posPicked && <div className='text-lg h-2/5' style={{ lineHeight: "1" }}>{player.posProb}%</div>}
+
+                          </div>
+                        </div>
+
+                        <div className='flex-1 h-max flex flex-row-reverse items-center overflow-hidden gap-3'>
+                          {player.classProb.length > 0 && player.classProb.map((cls, index) => {
+                            return (<div className='flex flex-col' key={index}>
+                              <Image src={classToPics[cls.class]} height={30} className='object-contain aspect-square' alt='pos' />
+                              <div className='text-sm'>{Math.floor(cls.prob)}%</div>
+                            </div>)
+                          })}
+                        </div>
+
+                      </div>
+
+
+                    </div> : <></>
+
+
+
+
+
+
+                  // <div className={`h-1/5 grborder${playerIndex + 6} flex flex-row-reverse p-3 gap-3 items-center champrow champrowright`} key={playerIndex}>
+                  //   <div className='h-full aspect-square relative' style={{ border: "0.2vh solid #b99c6a" }}>
+                  //     <div className='picshadow' onClick={(event) => selectPlayer(event, player.key, "red")}></div>
+                  //   </div>
+                  //   <div className='h-3/4 m-5 aspect-square rounded-full' style={{ border: "0.2vh solid #b99c6a" }}></div>
+                  // </div>
+                )
+              }
+
             })}
           </div>
         </div>

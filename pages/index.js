@@ -245,10 +245,68 @@ export default function Home() {
       setLockedDiv(null);
     }, 500)
 
-    modifyPlayer(_player, { "posPicked": true, "pos": _pos.name, ...calculateClassProb(_player,_pos.name) })
+    console.log(_pos.name);
+    const player = players.find(player => player.key === _player);
+    console.log(player.primPos)
 
+    if (_pos.name !== player.primPos) {
+      const playerToChange = players.find((_player2) => _player2.team == player.team && _player2.primPos == _pos.name)
+      if (playerToChange) {
+        modifyPlayer(playerToChange.key, { "primPos": player.primPos })
+      }
+
+    }
+
+    let _players = players;
+
+    _players = _players.map(_player2 => {
+      if (_player2.key === _player) {
+        return {
+          ..._player2,
+          "posPicked": true,
+          "pos": _pos.name,
+          ...calculateClassProb(_player, _pos.name)
+        }
+      } else {
+        return _player2
+      }
+    })
+
+    _players = updatePosProbs(_players);
+
+    setPlayers(_players);
   }
 
+  const updatePosProbs = (_players) => {
+    let pickedNumBlue = 0;
+    let pickedNumRed = 0;
+
+    _players.forEach((player) => {
+      if (player.team == "blue" && player.posPicked) {
+        pickedNumBlue++;
+      }
+      if (player.team == "red" && player.posPicked) {
+        pickedNumRed++;
+      }
+    })
+
+    _players = _players.map((player) => {
+      if (player.team === "blue") {
+        return {
+          ...player,
+          "posProb": (Math.floor(1 / (5 - pickedNumBlue) * 100)),
+        }
+      }
+      if (player.team === "red") {
+        return {
+          ...player,
+          "posProb": (Math.floor(1 / (5 - pickedNumRed) * 100)),
+        }
+      }
+    })
+
+    return _players;
+  }
 
 
 

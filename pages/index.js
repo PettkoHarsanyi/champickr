@@ -305,6 +305,13 @@ export default function Home() {
 
     _players = _players.map(_player2 => {
       if (_player2.key === player.key) {
+        if(player.isPicked){
+          return {
+            ..._player2,
+            "posPicked": true,
+            "pos": _pos.name,
+          }
+        }
         return {
           ..._player2,
           "posPicked": true,

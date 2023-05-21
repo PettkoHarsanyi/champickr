@@ -227,7 +227,9 @@ export default function Home() {
 
   const [lockedDiv, setLockedDiv] = useState(null);
 
-  const handlePickPos = async (_pos, _player, playerIndex) => {
+  const handlePickPos = async (_pos, playerName, playerIndex) => {
+    const player = players.find(player => player.key === playerName);
+    let _players = players;
 
     const posDiv = document.getElementById("posplayer" + playerIndex);
     posDiv.style.width = "100%"
@@ -245,27 +247,59 @@ export default function Home() {
       setLockedDiv(null);
     }, 500)
 
-    console.log(_pos.name);
-    const player = players.find(player => player.key === _player);
-    console.log(player.primPos)
-
-    if (_pos.name !== player.primPos) {
-      const playerToChange = players.find((_player2) => _player2.team == player.team && _player2.primPos == _pos.name)
-      if (playerToChange) {
-        modifyPlayer(playerToChange.key, { "primPos": player.primPos })
+    if (player.primPos !== _pos.name) {
+      const playerPosTaken = players.find((_player2) => _player2.team == player.team && _player2.primPos == _pos.name)
+      if (playerPosTaken) {
+        _players = _players.map((plyr) => {
+          if (plyr.key === playerPosTaken.key) {
+            return {
+              ...playerPosTaken,
+              "primPos": player.primPos,
+              ...calculateClassProb(plyr.key, player.primPos)
+            }
+          } else {
+            return plyr
+          }
+        })
       }
-
     }
 
-    let _players = players;
+    if (_players.some((plyr) => plyr.team === player.team && _pos.name === plyr.pos)) {
+      if (player.posPicked) {
+        _players = _players.map(plyr => {
+          if (plyr.team === player.team && _pos.name === plyr.pos) {
+            return {
+              ...plyr,
+              pos: player.pos,
+              ...calculateClassProb(plyr.key, player.pos)
+            }
+          } else {
+            return plyr;
+          }
+        })
+      } else {
+        _players = _players.map(plyr => {
+          if (plyr.team === player.team && _pos.name === plyr.pos) {
+            return {
+              ...plyr,
+              pos: player.primPos,
+              ...calculateClassProb(plyr.key, player.primPos)
+            }
+          } else {
+            return plyr;
+          }
+        })
+      }
+    }
+
 
     _players = _players.map(_player2 => {
-      if (_player2.key === _player) {
+      if (_player2.key === player.key) {
         return {
           ..._player2,
           "posPicked": true,
           "pos": _pos.name,
-          ...calculateClassProb(_player, _pos.name)
+          ...calculateClassProb(player.key, _pos.name)
         }
       } else {
         return _player2
@@ -292,15 +326,31 @@ export default function Home() {
 
     _players = _players.map((player) => {
       if (player.team === "blue") {
-        return {
-          ...player,
-          "posProb": (Math.floor(1 / (5 - pickedNumBlue) * 100)),
+        if (pickedNumBlue == 4) {
+          return {
+            ...player,
+            "posPicked": true,
+            "pos": player.primPos,
+          }
+        } else {
+          return {
+            ...player,
+            "posProb": (Math.floor(1 / (5 - pickedNumBlue) * 100)),
+          }
         }
       }
       if (player.team === "red") {
-        return {
-          ...player,
-          "posProb": (Math.floor(1 / (5 - pickedNumRed) * 100)),
+        if (pickedNumRed == 4) {
+          return {
+            ...player,
+            "posPicked": true,
+            "pos": player.primPos,
+          }
+        } else {
+          return {
+            ...player,
+            "posProb": (Math.floor(1 / (5 - pickedNumRed) * 100)),
+          }
         }
       }
     })
@@ -575,7 +625,32 @@ export default function Home() {
                           }
                         </div>
                         <div className='h-3/4 aspect-square relative'  >
-                          <div id={`posplayer${playerIndex}`} className='rounded-full absolute left-0 pickAnimation' style={{ height: "100%", width: "100%", border: "0.2vh solid #b99c6a", transition: "all 0.5s, opacity 1s", minWidth: "100%", overflow: "hidden", zIndex: "50" }}>
+                          <div id={`posplayer${playerIndex}`} className='rounded-full absolute left-0 pickAnimation' style={{ height: "100%", width: "100%", border: "0.2vh solid #b99c6a", transition: "all 0.5s, opacity 1s", minWidth: "100%", overflow: "hidden", zIndex: "50" }}
+                            onMouseOver={(event) => {
+                              const posDiv = document.getElementById("posplayer" + playerIndex);
+                              if (lockedDiv !== null && lockedDiv.isSameNode(posDiv)) {
+                                return;
+                              }
+                              posDiv.style.width = "500%"
+                              posDiv.style.backgroundColor = "#010a13"
+                              const innerPosDiv = document.getElementById("innerpos" + playerIndex);
+                              innerPosDiv.style.right = 0;
+                              innerPosDiv.style.opacity = 1;
+                              const frontDiv = document.getElementById("frontDiv" + playerIndex);
+                              frontDiv.classList.remove("frontDivAnimBackward")
+                              frontDiv.classList.add("frontDivAnimForward");
+                            }} onMouseLeave={(event) => {
+                              const posDiv = document.getElementById("posplayer" + playerIndex);
+                              posDiv.style.width = "100%"
+                              posDiv.style.backgroundColor = "transparent"
+                              const innerPosDiv = document.getElementById("innerpos" + playerIndex);
+                              innerPosDiv.style.right = 0;
+                              innerPosDiv.style.opacity = 0;
+                              const frontDiv = document.getElementById("frontDiv" + playerIndex);
+                              frontDiv.classList.remove("frontDivAnimForward")
+                              frontDiv.classList.add("frontDivAnimBackward");
+                            }}
+                          >
                             <div id={`innerpos${playerIndex}`} style={{ position: "relative", transition: "0.5s all", opacity: 0, width: "100%", right: 0 }} className='h-full flex flex-row justify-between'>
                               {positionPics.map((pos, index) => {
                                 return (

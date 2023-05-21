@@ -216,7 +216,11 @@ export default function Home() {
     const input = document.getElementById("inputname");
     input.value = "";
 
-    modifyPlayer(selectedPlayer.player, { "champion": _champion, "isPicked": true })
+    const champClasses = _champion.tags.map((cls) => {
+      return { "class": cls, "prob": 100 }
+    })
+
+    modifyPlayer(selectedPlayer.player, { "champion": _champion, "isPicked": true, "classProb": champClasses })
 
     lastPicked.closest(".champrow").classList.remove("champrowselected");
     lastPicked.classList.add("picshadowPicked");
@@ -252,6 +256,12 @@ export default function Home() {
       if (playerPosTaken) {
         _players = _players.map((plyr) => {
           if (plyr.key === playerPosTaken.key) {
+            if(plyr.isPicked){
+              return {
+                ...playerPosTaken,
+                "primPos": player.primPos,
+              }  
+            }
             return {
               ...playerPosTaken,
               "primPos": player.primPos,
@@ -327,6 +337,9 @@ export default function Home() {
     _players = _players.map((player) => {
       if (player.team === "blue") {
         if (pickedNumBlue == 4) {
+          if(player.posPicked){
+            return player;  
+          }
           return {
             ...player,
             "posPicked": true,
@@ -341,6 +354,9 @@ export default function Home() {
       }
       if (player.team === "red") {
         if (pickedNumRed == 4) {
+          if(player.posPicked){
+            return player;  
+          }
           return {
             ...player,
             "posPicked": true,
@@ -543,7 +559,7 @@ export default function Home() {
                         {player.classProb.length > 0 && player.classProb.map((cls, index) => {
                           return (<div className='flex flex-col' key={index}>
                             <Image src={classToPics[cls.class]} height={30} className='object-contain aspect-square' alt='pos' />
-                            <div className='text-sm'>{Math.floor(cls.prob)}%</div>
+                            {!player.isPicked && <div className='text-sm'>{Math.floor(cls.prob)}%</div>}
                           </div>)
                         })}
                       </div>
@@ -673,7 +689,7 @@ export default function Home() {
                           {player.classProb.length > 0 && player.classProb.map((cls, index) => {
                             return (<div className='flex flex-col' key={index}>
                               <Image src={classToPics[cls.class]} height={30} className='object-contain aspect-square' alt='pos' />
-                              <div className='text-sm'>{Math.floor(cls.prob)}%</div>
+                              {!player.isPicked && <div className='text-sm'>{Math.floor(cls.prob)}%</div>}
                             </div>)
                           })}
                         </div>

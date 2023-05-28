@@ -2,7 +2,7 @@ export const playersJson = [
     {
         "key": "player1",
         "team": "blue",
-        "champion": {},
+        "champion": null,
         "role": {},
         "isPicked": false,
         "primPos": "top",
@@ -16,7 +16,7 @@ export const playersJson = [
     {
         "key": "player2",
         "team": "blue",
-        "champion": {},
+        "champion": null,
         "role": {},
         "isPicked": false,
         "primPos": "jungle",
@@ -32,7 +32,7 @@ export const playersJson = [
     {
         "key": "player3",
         "team": "blue",
-        "champion": {},
+        "champion": null,
         "role": {},
         "isPicked": false,
         "primPos": "mid",
@@ -48,7 +48,7 @@ export const playersJson = [
     {
         "key": "player4",
         "team": "blue",
-        "champion": {},
+        "champion": null,
         "role": {},
         "isPicked": false,
         "primPos": "bottom",
@@ -64,7 +64,7 @@ export const playersJson = [
     {
         "key": "player5",
         "team": "blue",
-        "champion": {},
+        "champion": null,
         "role": {},
         "isPicked": false,
         "primPos": "support",
@@ -80,7 +80,7 @@ export const playersJson = [
     {
         "key": "player6",
         "team": "red",
-        "champion": {},
+        "champion": null,
         "role": {},
         "isPicked": false,
         "primPos": "top",
@@ -95,7 +95,7 @@ export const playersJson = [
     {
         "key": "player7",
         "team": "red",
-        "champion": {},
+        "champion": null,
         "role": {},
         "isPicked": false,
         "primPos": "jungle",
@@ -110,7 +110,7 @@ export const playersJson = [
     {
         "key": "player8",
         "team": "red",
-        "champion": {},
+        "champion": null,
         "role": {},
         "isPicked": false,
         "primPos": "mid",
@@ -125,7 +125,7 @@ export const playersJson = [
     {
         "key": "player9",
         "team": "red",
-        "champion": {},
+        "champion": null,
         "role": {},
         "isPicked": false,
         "primPos": "bottom",
@@ -140,7 +140,7 @@ export const playersJson = [
     {
         "key": "player10",
         "team": "red",
-        "champion": {},
+        "champion": null,
         "role": {},
         "isPicked": false,
         "primPos": "support",

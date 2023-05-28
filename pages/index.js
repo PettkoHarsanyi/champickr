@@ -134,10 +134,6 @@ export default function Home() {
     }
   }
 
-  useEffect(() => {
-    console.log(players);
-  }, [players])
-
   const selectFirstPlayer = () => {
     const circle = document.getElementById("circle");
     setFirstPicked(true);
@@ -206,8 +202,51 @@ export default function Home() {
 
   const filterChampName = (name) => {
     setChampSelect(Object.values(champions).filter((champ) =>
-      champ.id.toUpperCase().includes(name.toUpperCase())
+      champ.id.toUpperCase().includes(name.toUpperCase()) || champ.name.toUpperCase().includes(name.toUpperCase())
     ))
+  }
+
+  const countClasses = (_players) => {
+
+    let blueTeamClasses = {};
+    let redTeamClasses = {};
+
+    _players.forEach((player) => {
+      if (player.team === "blue" && player.champion !== null) {
+        player.champion.tags.forEach((tag) => {
+          if(blueTeamClasses[tag]){
+            blueTeamClasses[tag] += 1;
+          }else{
+            blueTeamClasses[tag] = 1;
+          }
+        })
+      }
+      if (player.team === "red" && player.champion !== null) {
+        player.champion.tags.forEach((tag) => {
+          if(redTeamClasses[tag]){
+            redTeamClasses[tag] += 1;
+          }else{
+            redTeamClasses[tag] = 1;
+          }
+        })
+      }
+    })
+
+
+    const remBlueClasses = {...blueTeamClasses};
+    const remRedClasses = {...redTeamClasses};
+
+    Object.keys(blueTeamClasses).forEach((key)=>{
+      classes[key].strongAgainst.forEach((cls)=>{
+        if(remRedClasses[cls] && remRedClasses[cls]>0){
+          remRedClasses[cls]--;
+        }
+      })
+    })
+
+    console.log(remRedClasses);
+
+
   }
 
   const handlePick = (_champion) => {
@@ -220,13 +259,30 @@ export default function Home() {
       return { "class": cls, "prob": 100 }
     })
 
-    modifyPlayer(selectedPlayer.player, { "champion": _champion, "isPicked": true, "classProb": champClasses })
+    let _players = players;
+
+    _players = _players.map((player) => {
+      if (player.key === selectedPlayer.player) {
+        return {
+          ...player,
+          "champion": _champion,
+          "isPicked": true,
+          "classProb": champClasses
+        }
+      }
+      else {
+        return player
+      }
+    })
+
+    countClasses(_players);
 
     lastPicked.closest(".champrow").classList.remove("champrowselected");
     lastPicked.classList.add("picshadowPicked");
     lastPicked.previousElementSibling.classList.add("champpicPicked")
     setLaneSelector("");
     setClassSelector([]);
+    modifyPlayer(selectedPlayer.player, { "champion": _champion, "isPicked": true, "classProb": champClasses })
   }
 
   const [lockedDiv, setLockedDiv] = useState(null);
@@ -256,11 +312,11 @@ export default function Home() {
       if (playerPosTaken) {
         _players = _players.map((plyr) => {
           if (plyr.key === playerPosTaken.key) {
-            if(plyr.isPicked){
+            if (plyr.isPicked) {
               return {
                 ...playerPosTaken,
                 "primPos": player.primPos,
-              }  
+              }
             }
             return {
               ...playerPosTaken,
@@ -305,7 +361,7 @@ export default function Home() {
 
     _players = _players.map(_player2 => {
       if (_player2.key === player.key) {
-        if(player.isPicked){
+        if (player.isPicked) {
           return {
             ..._player2,
             "posPicked": true,
@@ -344,8 +400,8 @@ export default function Home() {
     _players = _players.map((player) => {
       if (player.team === "blue") {
         if (pickedNumBlue == 4) {
-          if(player.posPicked){
-            return player;  
+          if (player.posPicked) {
+            return player;
           }
           return {
             ...player,
@@ -361,8 +417,8 @@ export default function Home() {
       }
       if (player.team === "red") {
         if (pickedNumRed == 4) {
-          if(player.posPicked){
-            return player;  
+          if (player.posPicked) {
+            return player;
           }
           return {
             ...player,
@@ -380,7 +436,6 @@ export default function Home() {
 
     return _players;
   }
-
 
 
   const secondBaseCountersOf = (_class) => {
@@ -406,7 +461,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    secondBaseCountersOf("marksman");
+    secondBaseCountersOf("Marksman");
   }, [])
 
 

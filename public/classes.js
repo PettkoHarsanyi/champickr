@@ -3,29 +3,29 @@ export const classes = {
     "counter": [],
     "strongAgainst": []
   },
-  "tank": {
-    "name": "tank",
-    "counter": ["fighter", "marksman"],
-    "strongAgainst": ["assassin", "mage"],
+  "Tank": {
+    "name": "Tank",
+    "counter": ["Fighter", "Marksman"],
+    "strongAgainst": ["Assassin", "Mage"],
   },
-  "assassin": {
-    "name": "assassin",
-    "counter": ["tank", "fighter"],
-    "strongAgainst": ["mage", "marksman"],
+  "Assassin": {
+    "name": "Assassin",
+    "counter": ["Tank", "Fighter"],
+    "strongAgainst": ["Mage", "Marksman"],
   },
-  "mage": {
-    "name": "mage",
-    "counter": ["assassin", "tank"],
-    "strongAgainst": ["marksman", "fighter"],
+  "Mage": {
+    "name": "Mage",
+    "counter": ["Assassin", "Tank"],
+    "strongAgainst": ["Marksman", "Fighter"],
   },
-  "marksman": {
-    "name": "marksman",
-    "counter": ["mage", "assassin"],
-    "strongAgainst": ["fighter", "tank"]
+  "Marksman": {
+    "name": "Marksman",
+    "counter": ["Mage", "Assassin"],
+    "strongAgainst": ["Fighter", "Tank"]
   },
-  "fighter": {
-    "name": "fighter",
-    "counter": ["marksman", "mage"],
-    "strongAgainst": ["tank", "assassin"]
+  "Fighter": {
+    "name": "Fighter",
+    "counter": ["Marksman", "Mage"],
+    "strongAgainst": ["Tank", "Assassin"]
   },
 }

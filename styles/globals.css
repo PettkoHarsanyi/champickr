@@ -479,3 +479,27 @@ body {
   border-radius: 30%;
   box-shadow: 0px 0px 0.2vh 0.2vh #b99c6a;
 }
+
+.noEnemyProbDiv{
+  /* display: none;
+  visibility: hidden;
+  opacity: 0; */
+
+  border: 0.5vh solid #b99c6a;
+  display: flex;
+  visibility: visible;
+  opacity: 1;
+  width: 75%;
+  height: max-content;
+}
+
+.noEnemyProbDivFull{
+  display: flex;
+  visibility: visible;
+  opacity: 1;
+}
+
+.infoDiv{
+  border-top: 0.5vh solid #b99c6a;
+  border-left: 0.5vh solid #b99c6a;
+}

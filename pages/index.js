@@ -206,7 +206,7 @@ export default function Home() {
     ))
   }
 
-  const countClasses = (_players) => {
+  const countRemClasses = (_players) => {
 
     let blueTeamClasses = {};
     let redTeamClasses = {};
@@ -214,18 +214,18 @@ export default function Home() {
     _players.forEach((player) => {
       if (player.team === "blue" && player.champion !== null) {
         player.champion.tags.forEach((tag) => {
-          if(blueTeamClasses[tag]){
+          if (blueTeamClasses[tag]) {
             blueTeamClasses[tag] += 1;
-          }else{
+          } else {
             blueTeamClasses[tag] = 1;
           }
         })
       }
       if (player.team === "red" && player.champion !== null) {
         player.champion.tags.forEach((tag) => {
-          if(redTeamClasses[tag]){
+          if (redTeamClasses[tag]) {
             redTeamClasses[tag] += 1;
-          }else{
+          } else {
             redTeamClasses[tag] = 1;
           }
         })
@@ -233,18 +233,32 @@ export default function Home() {
     })
 
 
-    const remBlueClasses = {...blueTeamClasses};
-    const remRedClasses = {...redTeamClasses};
+    const remBlueClasses = { ...blueTeamClasses };
+    const remRedClasses = { ...redTeamClasses };
 
-    Object.keys(blueTeamClasses).forEach((key)=>{
-      classes[key].strongAgainst.forEach((cls)=>{
-        if(remRedClasses[cls] && remRedClasses[cls]>0){
-          remRedClasses[cls]--;
+
+
+    Object.keys(blueTeamClasses).forEach((key) => {
+
+      classes[key].strongAgainst.forEach((cls) => {
+        if (remRedClasses[cls] && remRedClasses[cls] > 0) {
+          remRedClasses[cls] -= blueTeamClasses[key];
         }
       })
     })
 
-    console.log(remRedClasses);
+    Object.keys(redTeamClasses).forEach((key) => {
+      classes[key].strongAgainst.forEach((cls) => {
+        if (remBlueClasses[cls] && remBlueClasses[cls] > 0) {
+          remBlueClasses[cls] -= redTeamClasses[key];
+        }
+      })
+    })
+
+    return {
+      "blue": remBlueClasses,
+      "red": remRedClasses,
+    }
 
 
   }
@@ -275,7 +289,7 @@ export default function Home() {
       }
     })
 
-    countClasses(_players);
+    calculatePickProb(_players, countRemClasses(_players));
 
     lastPicked.closest(".champrow").classList.remove("champrowselected");
     lastPicked.classList.add("picshadowPicked");
@@ -283,6 +297,13 @@ export default function Home() {
     setLaneSelector("");
     setClassSelector([]);
     modifyPlayer(selectedPlayer.player, { "champion": _champion, "isPicked": true, "classProb": champClasses })
+  }
+
+  const calculatePickProb = (_players, _remClasses) => {
+    if (_players.every(player => player.team === "blue" || player.isPicked === false)) {
+      const probDiv = document.getElementById("noenemyprob");
+      probDiv.classList.add("noEnemyProbDivFull");
+    }
   }
 
   const [lockedDiv, setLockedDiv] = useState(null);
@@ -565,7 +586,7 @@ export default function Home() {
                         {
                           !player.self ?
                             <>
-                              <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (champpics[(index + playerIndex) % champpics.length])} fill sizes='50px' alt='champ' />
+                              <Image className='champpic' src={player.isPicked ? (PICLINK + player.champion.image.full) : (champpics[(index + playerIndex) % champpics.length])} fill sizes='50px' alt={player.champion ? player.champion.name : "champion"} />
                               <div id={`leftpicshadow${playerIndex + 1}`} className='picshadow' onClick={(event) => selectPlayer(event, player.key, "blue")}></div>
                             </>
                             :
@@ -634,7 +655,7 @@ export default function Home() {
             })}
           </div>
 
-          <div className='w-[40%] flex flex-col align-middle justify-center relative'>
+          <div className='w-[40%] flex flex-row align-middle justify-center relative'>
             <div id="circle">
               <div style={{ padding: "15vh", fontSize: "4vh" }} className='z-10 pointer-events-none'>Pick at least one champion to calculate</div>
               <div id="" className='absolute m-auto top-0 left-0 bottom-0 right-0 flex flex-row items-center justify-center z-0'>
@@ -679,6 +700,30 @@ export default function Home() {
                   })}
                 </div>
               </div>
+            </div>
+            <div id="noenemyprob" className='noEnemyProbDiv flex flex-col relative'>
+              <div className='h-[30%] flex flex-row relative'>
+                <div className='h-[100%] aspect-square' style={{ border: "solid #b99c6a 0.5vh", borderTop: "none", borderLeft: "none", backgroundColor: "black" }}>
+                  <Image src={fighter} width={192} height={192} />
+                </div>
+                <div className='flex-1 flex flex-col'>
+                  <div className='h-[50%] text-lg flex flex-col align-middle justify-center italic p-3' style={{ backgroundColor: "#363636", borderBottom: "0.5vh solid #b99c6a" }}>
+                    BLUE TEAM DOMINANT CLASS:
+                  </div>
+                  <div className='flex-1 text-5xl flex flex-col align-middle justify-center italic p-3' style={{ textAlign: "left", backgroundColor: "#111111", borderBottom: "0.5vh solid #b99c6a", boxShadow: "inset 0.5vh 0.5vh 1vh 0.5vh black" }}>
+                    TANK
+                  </div>
+                </div>
+              </div>
+              <div className='flex-1 p-10 flex flex-col items-center gap-10' style={{ boxShadow: "inset 0 0.5vh 0.5vh 0.5vh black" }}>
+                <div className='infoDiv text-sm' style={{textAlign:"left", letterSpacing:"0px", padding:"1vh"}}>
+                  You haven't picked any enemy champion.
+                  The enemy dominant class can only be an assumption by hoping for a counter to your team’s dominant class.
+                  Considering the assumption you would counter the enemy with a 50% of mage, 25% of tank and 25% of assasin.
+                </div>
+                <div style={{border:"0.5vh solid #b99c6a", width:"max-content", padding:"2vh", letterSpacing:"2px"}}>SEE MAGES</div>
+              </div>
+              {/* <div className='absolute t-0 l-0' style={{borderRadius:"50%",border:"0.5vh solid #b99c6a",zIndex:"100", width:"10vh", height:"10vh", transform:"translate(-50%,-50%)", background:"transparent"}}></div> */}
             </div>
           </div>
 

@@ -1,5 +1,5 @@
 export const classes = {
-  "controller": {
+  "Controller": {
     "counter": [],
     "strongAgainst": []
   },

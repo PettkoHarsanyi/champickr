@@ -371,7 +371,6 @@ body {
 .champ {
   border: 0.5vh solid #b99c6a;
   aspect-ratio: 1/1;
-  cursor: pointer;
 }
 
 .champrow {
@@ -481,25 +480,35 @@ body {
 }
 
 .noEnemyProbDiv{
-  /* display: none;
   visibility: hidden;
-  opacity: 0; */
+  opacity: 0;
 
   border: 0.5vh solid #b99c6a;
-  display: flex;
-  visibility: visible;
-  opacity: 1;
-  width: 75%;
+  width: 65%;
   height: max-content;
+  transition: 0.1s all ease-in;
+  transform: scale(0.9);
+  box-shadow: none;
 }
 
 .noEnemyProbDivFull{
-  display: flex;
+  transition: 0.5s all ease-in;
   visibility: visible;
   opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 0 3vh 1vh rgb(0, 102, 255);
 }
 
 .infoDiv{
   border-top: 0.5vh solid #b99c6a;
   border-left: 0.5vh solid #b99c6a;
+}
+
+.seeClasses{
+  transition: 0.2s all;
+}
+
+.seeClasses:hover{
+  /* background-color: rgb(0, 102, 255); */
+  box-shadow: inset 0 0 5vh 1vh #0066ff;
 }

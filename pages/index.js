@@ -40,12 +40,11 @@ export default function Home() {
   const [champions, setChampions] = useState(championsJson);
   const [index, setIndex] = useState(0);
   const [firstPicked, setFirstPicked] = useState(false);
-  const [lastPicked, setLastPicked] = useState(null);
+  const [lastPicked, setLastPicked] = useState(null);  // DIV OF THE LAST SELECTED PLAYER. STORED DUE TO LATER DOM MODIFICATIONS
+  const [isOfferStage, setOfferStage] = useState(false); // IT MODIFIES THE AVAILABILITY TO PICK CHAMPION ON THE SELECTOR. IF OFFER STAGE, IT JUST SHOWS OFFERS, IF NOT, YOU CAN PICK CHAMPS FOR PLAYERS
 
   const [champSelect, setChampSelect] = useState(Object.values(championsJson));
   const [selectedPlayer, setSelectedPlayer] = useState({ "player": "", "team": "" });
-  const [classSelector, setClassSelector] = useState([]);
-  const [laneSelector, setLaneSelector] = useState("");
 
   const [positionPics] = useState([{ "pos": top, "name": "top" }, { "pos": jungle, "name": "jungle" }, { "pos": mid, "name": "mid" }, { "pos": bottom, "name": "bottom" }, { "pos": support, "name": "support" }]);
   const [champpics] = useState([ashe, ahri, amumu, garen, riven, vayne, yasuo, zac, zed])
@@ -167,8 +166,18 @@ export default function Home() {
   const selectPlayer = (event, _player, _team) => {
     event.stopPropagation();
 
+    setLaneFilter("");
+    setClassFilter([]);
+    setInputValue("");
+
     const selectorDiv = document.getElementById("selector");
     selectorDiv.classList.add("selectorFull");
+
+    const probDiv = document.getElementById("noenemyprob");
+    probDiv.classList.remove("noEnemyProbDivFull");
+
+    setOfferStage(false);
+
 
     if (lastPicked == null) {
     } else {
@@ -204,6 +213,17 @@ export default function Home() {
     setChampSelect(Object.values(champions).filter((champ) =>
       champ.id.toUpperCase().includes(name.toUpperCase()) || champ.name.toUpperCase().includes(name.toUpperCase())
     ))
+  }
+
+  const showOffers = (classes, lane) => {
+    setLaneFilter(lane);
+    setClassFilter(classes);
+
+    const selectorDiv = document.getElementById("selector");
+    selectorDiv.classList.add("selectorFull");
+
+    const probDiv = document.getElementById("noenemyprob");
+    probDiv.classList.remove("noEnemyProbDivFull");
   }
 
   const countRemClasses = (_players) => {
@@ -294,8 +314,6 @@ export default function Home() {
     lastPicked.closest(".champrow").classList.remove("champrowselected");
     lastPicked.classList.add("picshadowPicked");
     lastPicked.previousElementSibling.classList.add("champpicPicked")
-    setLaneSelector("");
-    setClassSelector([]);
     modifyPlayer(selectedPlayer.player, { "champion": _champion, "isPicked": true, "classProb": champClasses })
   }
 
@@ -516,51 +534,65 @@ export default function Home() {
     modifyPlayer(playerName, { "self": true });
   }
 
-  const handleSelectLane = (lane) => {
-    setLaneSelector(() => {
-      if (laneSelector == lane) {
-        return ""
-      }
-      return lane;
-    })
+  const [inputValue, setInputValue] = useState("");
+  const [laneFilter, setLaneFilter] = useState("");
+  const [classFilter, setClassFilter] = useState([]);
+
+  const handleInputChange = (event) => {
+    setInputValue(() => event.target.value);
   }
 
-  const handleSelectClass = (_class) => {
-    setClassSelector(() => {
-      if (classSelector.includes(_class)) {
-        return classSelector.filter((_class2) => _class != _class2)
-      }
-      return [...classSelector, _class]
-    })
+  const handleFilterLane = (_lane) => {
+    if (laneFilter == _lane) {
+      setLaneFilter("")
+    } else {
+      setLaneFilter(_lane);
+    }
+  }
+
+  const handleFilterClass = (_class) => {
+    if (classFilter.includes(_class)) {
+      setClassFilter(classFilter.filter(cls => cls !== _class));
+    } else {
+      setClassFilter([...classFilter, _class]);
+    }
   }
 
   useEffect(() => {
-    filterSelection();
-  }, [classSelector, laneSelector])
-
-  const filterSelection = () => {
-    if (laneSelector == "" && classSelector.length == 0) {
-      setChampSelect(Object.values(champions));
-    } else {
-      if (laneSelector == "") {
-        setChampSelect(
-          Object.values(champions).filter(champ => {
-            return classSelector.every(cls => champ.tags.includes(cls));
-          })
-        )
-      }
-      else {
-
-        setChampSelect(
-          Object.values(champions).filter((champ) => {
-            return champ.lanes.includes(laneSelector);
-          }).filter(champ => {
-            return classSelector.every(cls => champ.tags.includes(cls));
-          })
-        )
-      }
+    if (laneFilter !== "" || classFilter.length > 0) {
+      setInputValue("");
     }
-  }
+  }, [laneFilter, classFilter])
+
+  useEffect(() => {
+    if (inputValue !== "") {
+      setLaneFilter("");
+      setClassFilter([]);
+    }
+  }, [inputValue])
+
+  useEffect(() => {
+    let filteredChamps = Object.values(champions);
+
+    if (inputValue !== "") {
+      filteredChamps = filteredChamps.filter((champ) =>
+        champ.id.toUpperCase().includes(inputValue.toUpperCase()) || champ.name.toUpperCase().includes(inputValue.toUpperCase())
+      )
+    }
+
+    if (laneFilter !== "") {
+      filteredChamps = filteredChamps.filter((champ) => {
+        return champ.lanes.includes(laneFilter)
+      })
+    }
+
+    if (classFilter.length > 0) {
+      filteredChamps = filteredChamps.filter((champ) => {
+        return classFilter.every(cls => champ.tags.includes(cls));
+      })
+    }
+    setChampSelect(filteredChamps);
+  }, [inputValue, laneFilter, classFilter])
 
   return (
     <main
@@ -656,72 +688,77 @@ export default function Home() {
           </div>
 
           <div className='w-[40%] flex flex-row align-middle justify-center relative'>
-            <div id="circle">
+            <div id="circle" className='flex flex-col justify-center align-middle items-center absolute'>
               <div style={{ padding: "15vh", fontSize: "4vh" }} className='z-10 pointer-events-none'>Pick at least one champion to calculate</div>
               <div id="" className='absolute m-auto top-0 left-0 bottom-0 right-0 flex flex-row items-center justify-center z-0'>
                 <Image src={circle} width={400} alt="circle" className='circle' />
               </div>
             </div>
-            <div id='selector' className='absolute h-[90%] border border-red-800 left-0 right-0 m-auto selector'>
+            <div id='selector' className='absolute h-[90%] border border-red-800 left-0 right-0 m-auto selector z-50'>
               <div className='searchbar flex flex-row justify-between align-middle items-center'>
-                <input onChange={(event) => { filterChampName(event.target.value) }} id="inputname" type='text' placeholder='Start typing...' className='w-4/5 inputfield' style={{ flex: 1 }} autoFocus />
+                <input value={inputValue} onChange={(event) => { handleInputChange(event) }} id="inputname" type='text' placeholder='Start typing...' className='w-4/5 inputfield' style={{ flex: 1 }} autoFocus />
                 <div style={{ width: "30px", margin: "2vh" }}>
                   <Image src={magn} alt='magnifyer' />
                 </div>
-                <div className='cursor-pointer' onClick={() => { filterChampName(""); document.getElementById("inputname").value = ""; setLaneSelector(""); setClassSelector([]) }}>
+                <div className='cursor-pointer' onClick={() => {
+                  setLaneFilter("");
+                  setClassFilter([]);
+                  setInputValue("");
+                }}>
                   <RxCrossCircled className='text-6xl' />
                 </div>
               </div>
               <div className='h-[20%] flex flex-col justify-evenly items-center'>
                 <div className='border-[#b99c6a] border rounded-full flex flex-row gap-3 p-2 overflow-hidden w-[50%] justify-center'>
-                  <Image src={tank} alt="tank" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classSelector.includes("Tank") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectClass("Tank") }} />
-                  <Image src={fighter} alt="fighter" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classSelector.includes("Fighter") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectClass("Fighter") }} />
-                  <Image src={mage} alt="mage" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classSelector.includes("Mage") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectClass("Mage") }} />
-                  <Image src={slayer} alt="slayer" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classSelector.includes("Assassin") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectClass("Assassin") }} />
-                  <Image src={marksman} alt="marksman" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classSelector.includes("Marksman") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectClass("Marksman") }} />
-                  <Image src={controller} alt="controller" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classSelector.includes("Controller") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectClass("Controller") }} />
+                  <Image src={tank} alt="tank" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classFilter.includes("Tank") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleFilterClass("Tank") }} />
+                  <Image src={fighter} alt="fighter" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classFilter.includes("Fighter") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleFilterClass("Fighter") }} />
+                  <Image src={mage} alt="mage" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classFilter.includes("Mage") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleFilterClass("Mage") }} />
+                  <Image src={slayer} alt="slayer" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classFilter.includes("Assassin") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleFilterClass("Assassin") }} />
+                  <Image src={marksman} alt="marksman" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classFilter.includes("Marksman") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleFilterClass("Marksman") }} />
+                  <Image src={controller} alt="controller" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={classFilter.includes("Controller") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleFilterClass("Controller") }} />
                 </div>
                 <div className='border-[#b99c6a] border rounded-full flex flex-row gap-3 p-2 overflow-hidden w-[40%] justify-center'>
-                  <Image src={top} alt="top" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={laneSelector.includes("top") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectLane("top") }} />
-                  <Image src={jungle} alt="jungle" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={laneSelector.includes("jungle") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectLane("jungle") }} />
-                  <Image src={mid} alt="mid" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={laneSelector.includes("mid") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectLane("mid") }} />
-                  <Image src={bottom} alt="bottom" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={laneSelector.includes("bottom") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectLane("bottom") }} />
-                  <Image src={support} alt="support" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={laneSelector.includes("support") ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleSelectLane("support") }} />
+                  <Image src={top} alt="top" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={laneFilter == "top" ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleFilterLane("top") }} />
+                  <Image src={jungle} alt="jungle" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={laneFilter == "jungle" ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleFilterLane("jungle") }} />
+                  <Image src={mid} alt="mid" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={laneFilter == "mid" ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleFilterLane("mid") }} />
+                  <Image src={bottom} alt="bottom" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={laneFilter == "bottom" ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleFilterLane("bottom") }} />
+                  <Image src={support} alt="support" style={{ width: "30px", aspectRatio: "1/1", objectFit: "contain" }} className={laneFilter == "support" ? "laneSelectorSelected" : "" + "aspect-square object-contain"} onClick={() => { handleFilterLane("support") }} />
                 </div>
               </div>
               <div className='champlist container m-auto'>
                 <div className='w-full grid grid-cols-7 gap-1 champsscroll'>
                   {Object.values(champSelect).map((champion, index) => {
                     return (
-                      <div className='champ' key={champion.key}>
-                        <Image onClick={() => handlePick(champion)} src={PICLINK + champion.image.full} width={100} height={100} alt={champion.name} style={{ objectFit: "contain" }} />
+                      <div className={`champ ${isOfferStage ? "" : "cursor-pointer"}`} key={champion.key} >
+                        <Image onClick={() => { if (!isOfferStage) { handlePick(champion) } }} src={PICLINK + champion.image.full} width={100} height={100} alt={champion.name} style={{ objectFit: "contain" }} />
                       </div>
                     )
                   })}
                 </div>
               </div>
             </div>
-            <div id="noenemyprob" className='noEnemyProbDiv flex flex-col relative'>
+            <div id="noenemyprob" className='noEnemyProbDiv flex flex-col relative z-40'>
               <div className='h-[30%] flex flex-row relative'>
-                <div className='h-[100%] aspect-square' style={{ border: "solid #b99c6a 0.5vh", borderTop: "none", borderLeft: "none", backgroundColor: "black" }}>
-                  <Image src={fighter} width={192} height={192} />
+                <div className='h-[100%] aspect-square ' style={{ border: "solid #b99c6a 0.5vh", borderTop: "none", borderLeft: "none" }}>
+                  <Image src={fighter} width={192} height={192} alt='class' />
                 </div>
                 <div className='flex-1 flex flex-col'>
                   <div className='h-[50%] text-lg flex flex-col align-middle justify-center italic p-3' style={{ backgroundColor: "#363636", borderBottom: "0.5vh solid #b99c6a" }}>
                     BLUE TEAM DOMINANT CLASS:
                   </div>
-                  <div className='flex-1 text-5xl flex flex-col align-middle justify-center italic p-3' style={{ textAlign: "left", backgroundColor: "#111111", borderBottom: "0.5vh solid #b99c6a", boxShadow: "inset 0.5vh 0.5vh 1vh 0.5vh black" }}>
+                  <div className='  flex-1 text-5xl flex flex-col align-middle justify-center italic p-3' style={{ textAlign: "left", backgroundColor: "#111111", borderBottom: "0.5vh solid #b99c6a", boxShadow: "inset 0.5vh 0.5vh 1vh 0.5vh black" }}>
                     TANK
                   </div>
                 </div>
               </div>
               <div className='flex-1 p-10 flex flex-col items-center gap-10' style={{ boxShadow: "inset 0 0.5vh 0.5vh 0.5vh black" }}>
-                <div className='infoDiv text-sm' style={{textAlign:"left", letterSpacing:"0px", padding:"1vh"}}>
-                  You haven't picked any enemy champion.
-                  The enemy dominant class can only be an assumption by hoping for a counter to your team’s dominant class.
-                  Considering the assumption you would counter the enemy with a 50% of mage, 25% of tank and 25% of assasin.
+                <div className='infoDiv text-sm' style={{ textAlign: "left", letterSpacing: "0px", padding: "1vh" }}>
+                  <div>You haven't picked any enemy champion.
+                    The enemy dominant class can only be an assumption by hoping for a counter to your team’s dominant class.
+                    Considering the assumption you would counter the enemy with a 50% of mage, 25% of tank and 25% of assasin.
+                  </div>
                 </div>
-                <div style={{border:"0.5vh solid #b99c6a", width:"max-content", padding:"2vh", letterSpacing:"2px"}}>SEE MAGES</div>
+                <div className='cursor-pointer seeClasses' style={{ border: "0.5vh solid #b99c6a", width: "max-content", padding: "2vh", letterSpacing: "2px" }} onClick={() => { setOfferStage(true); showOffers(["Tank", "Fighter"], "top"); }}>SEE MAGES</div>
               </div>
               {/* <div className='absolute t-0 l-0' style={{borderRadius:"50%",border:"0.5vh solid #b99c6a",zIndex:"100", width:"10vh", height:"10vh", transform:"translate(-50%,-50%)", background:"transparent"}}></div> */}
             </div>

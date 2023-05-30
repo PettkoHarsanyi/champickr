@@ -726,7 +726,19 @@ export default function Home() {
                 </div>
               </div>
               <div className='champlist container m-auto'>
-                <div className='w-full grid grid-cols-7 gap-1 champsscroll'>
+                {
+                  Object.values(champSelect).length == 0 ? inputValue!=="" ? `There are no champs called ${inputValue} :(` : `There are no any ${classFilter.join(" - ")} ${laneFilter==""?"champs":"champs on "+laneFilter} :(`:
+                    <div className='w-full grid grid-cols-7 gap-1 champsscroll'>
+                      {Object.values(champSelect).map((champion, index) => {
+                        return (
+                          <div className={`champ ${isOfferStage ? "" : "cursor-pointer"}`} key={champion.key} >
+                            <Image onClick={() => { if (!isOfferStage) { handlePick(champion) } }} src={PICLINK + champion.image.full} width={100} height={100} alt={champion.name} style={{ objectFit: "contain" }} />
+                          </div>
+                        )
+                      })}
+                    </div>
+                }
+                {/* <div className='w-full grid grid-cols-7 gap-1 champsscroll'>
                   {Object.values(champSelect).map((champion, index) => {
                     return (
                       <div className={`champ ${isOfferStage ? "" : "cursor-pointer"}`} key={champion.key} >
@@ -734,7 +746,8 @@ export default function Home() {
                       </div>
                     )
                   })}
-                </div>
+                  {Object.value(champSelect).length == 0 ? <div></div>:}
+                </div> */}
               </div>
             </div>
             <div id="noenemyprob" className='noEnemyProbDiv flex flex-col relative z-40'>
@@ -755,10 +768,10 @@ export default function Home() {
                 <div className='infoDiv text-sm' style={{ textAlign: "left", letterSpacing: "0px", padding: "1vh" }}>
                   <div>You haven't picked any enemy champion.
                     The enemy dominant class can only be an assumption by hoping for a counter to your team’s dominant class.
-                    Considering the assumption you would counter the enemy with a 50% of mage, 25% of tank and 25% of assasin.
+                    Considering the assumption you would counter the enemy with a <span className='text-lg underline'>50% of mage, 25% of tank and 25% of assasin.</span>
                   </div>
                 </div>
-                <div className='cursor-pointer seeClasses' style={{ border: "0.5vh solid #b99c6a", width: "max-content", padding: "2vh", letterSpacing: "2px" }} onClick={() => { setOfferStage(true); showOffers(["Tank", "Fighter"], "top"); }}>SEE MAGES</div>
+                <div className='cursor-pointer seeClasses text-3xl' style={{ border: "0.5vh solid #b99c6a", width: "max-content", padding: "2vh", letterSpacing: "1.5px", maxWidth: "80%" }} onClick={() => { setOfferStage(true); showOffers(["Mage"], "mid"); }}>SEE MAGES</div>
               </div>
               {/* <div className='absolute t-0 l-0' style={{borderRadius:"50%",border:"0.5vh solid #b99c6a",zIndex:"100", width:"10vh", height:"10vh", transform:"translate(-50%,-50%)", background:"transparent"}}></div> */}
             </div>

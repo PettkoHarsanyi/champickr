@@ -232,23 +232,46 @@ export default function Home() {
     let redTeamClasses = {};
 
     _players.forEach((player) => {
-      if (player.team === "blue" && player.champion !== null) {
-        player.champion.tags.forEach((tag) => {
-          if (blueTeamClasses[tag]) {
-            blueTeamClasses[tag] += 1;
-          } else {
-            blueTeamClasses[tag] = 1;
+      if (player.team === "blue") {
+        if (player.champion !== null) {
+          player.champion.tags.forEach((tag) => {
+            if (blueTeamClasses[tag]) {
+              blueTeamClasses[tag] += 1;
+            } else {
+              blueTeamClasses[tag] = 1;
+            }
+          })
+        } else {
+          for (let index = 0; index < 2; index++) {
+            if (blueTeamClasses[player.classProb[index].class]) {
+              blueTeamClasses[player.classProb[index].class] += 1;
+            } else {
+              blueTeamClasses[player.classProb[index].class] = 1;
+            }
           }
-        })
+        }
       }
-      if (player.team === "red" && player.champion !== null) {
-        player.champion.tags.forEach((tag) => {
-          if (redTeamClasses[tag]) {
-            redTeamClasses[tag] += 1;
-          } else {
-            redTeamClasses[tag] = 1;
+      if (player.team === "red") {
+        if (player.champion !== null) {
+
+          player.champion.tags.forEach((tag) => {
+            if (redTeamClasses[tag]) {
+              redTeamClasses[tag] += 1;
+            } else {
+              redTeamClasses[tag] = 1;
+            }
+          })
+        } else {
+          if (!player.isPicked) {
+            for (let index = 0; index < 2; index++) {
+              if (redTeamClasses[player.classProb[index].class]) {
+                redTeamClasses[player.classProb[index].class] += 1;
+              } else {
+                redTeamClasses[player.classProb[index].class] = 1;
+              }
+            }
           }
-        })
+        }
       }
     })
 
@@ -261,16 +284,18 @@ export default function Home() {
     Object.keys(blueTeamClasses).forEach((key) => {
 
       classes[key].strongAgainst.forEach((cls) => {
-        if (remRedClasses[cls] && remRedClasses[cls] > 0) {
+        if (remRedClasses[cls]) {
           remRedClasses[cls] -= blueTeamClasses[key];
+          remRedClasses[cls] = Math.max(remRedClasses[cls], 0);
         }
       })
     })
 
     Object.keys(redTeamClasses).forEach((key) => {
       classes[key].strongAgainst.forEach((cls) => {
-        if (remBlueClasses[cls] && remBlueClasses[cls] > 0) {
+        if (remBlueClasses[cls]) {
           remBlueClasses[cls] -= redTeamClasses[key];
+          remBlueClasses[cls] = Math.max(remBlueClasses[cls], 0);
         }
       })
     })
@@ -278,6 +303,8 @@ export default function Home() {
     return {
       "blue": remBlueClasses,
       "red": remRedClasses,
+      "blueTeamClasses": blueTeamClasses,
+      "redTeamClasses": redTeamClasses,
     }
 
 
@@ -316,9 +343,49 @@ export default function Home() {
     lastPicked.previousElementSibling.classList.add("champpicPicked")
     modifyPlayer(selectedPlayer.player, { "champion": _champion, "isPicked": true, "classProb": champClasses })
   }
+  
+  const [offeredClasses,setOfferedClasses] = useState([]);
+  const [blueTeamDominant,setBlueTeamDominant] = useState(""); 
 
   const calculatePickProb = (_players, _remClasses) => {
-    if (_players.every(player => player.team === "blue" || player.isPicked === false)) {
+    if (_players.every(player => player.team === "blue" || player.isPicked === false)) { // HA AZ ELLENFÉLBŐL MÉG NEM VÁLASZTOTTAK HŐST
+      // if(Object.keys(_remClasses.blue).every((cls)=>_remClasses.blue[cls]==0 || cls=="Controller")){
+      //   console.log("mind 0 vagy controller");
+      //   console.log("Tehát a legpopulárisabb osztály ellenosztálya ellen választunk")
+      //   console.log("A legpopulárisabb:");
+      //   console.log(_remClasses.blueTeamClasses);
+      //   // ENNEK AZ OBJEKTUMNAK A MAXJA 👆
+
+      // }else{
+      //   // HA VAN OLYAN AMI COUNTER
+      // }
+
+      // ENNEK AZ OBJEKTUMNAK A MAXJA 👆
+
+      let max = 0;
+      let maxKey = "";
+      for(const [key,value] of Object.entries(_remClasses.blueTeamClasses)){
+        if(value>max){
+          max = value,
+          maxKey = key;
+        }
+      }
+
+      setBlueTeamDominant(maxKey);
+
+      let scndbs = secondBaseCountersOf(maxKey);
+      
+      let sortable = [];
+      for (var cls in scndbs) {
+          sortable.push([cls, scndbs[cls]]);
+      }
+      
+      sortable.sort(function(a, b) {
+          return b[1] - a[1];
+      });
+
+      setOfferedClasses(sortable);
+
       const probDiv = document.getElementById("noenemyprob");
       probDiv.classList.add("noEnemyProbDivFull");
     }
@@ -497,6 +564,8 @@ export default function Home() {
         result[item] = 1;
       }
     }
+
+    return result;
   }
 
   useEffect(() => {
@@ -727,7 +796,7 @@ export default function Home() {
               </div>
               <div className='champlist container m-auto'>
                 {
-                  Object.values(champSelect).length == 0 ? inputValue!=="" ? `There are no champs called ${inputValue} :(` : `There are no any ${classFilter.join(" - ")} ${laneFilter==""?"champs":"champs on "+laneFilter} :(`:
+                  Object.values(champSelect).length == 0 ? inputValue !== "" ? `There are no champs called ${inputValue} :(` : `There are no any ${classFilter.join(" - ")} ${laneFilter == "" ? "champs" : "champs on " + laneFilter} :(` :
                     <div className='w-full grid grid-cols-7 gap-1 champsscroll'>
                       {Object.values(champSelect).map((champion, index) => {
                         return (
@@ -738,16 +807,6 @@ export default function Home() {
                       })}
                     </div>
                 }
-                {/* <div className='w-full grid grid-cols-7 gap-1 champsscroll'>
-                  {Object.values(champSelect).map((champion, index) => {
-                    return (
-                      <div className={`champ ${isOfferStage ? "" : "cursor-pointer"}`} key={champion.key} >
-                        <Image onClick={() => { if (!isOfferStage) { handlePick(champion) } }} src={PICLINK + champion.image.full} width={100} height={100} alt={champion.name} style={{ objectFit: "contain" }} />
-                      </div>
-                    )
-                  })}
-                  {Object.value(champSelect).length == 0 ? <div></div>:}
-                </div> */}
               </div>
             </div>
             <div id="noenemyprob" className='noEnemyProbDiv flex flex-col relative z-40'>
@@ -760,7 +819,7 @@ export default function Home() {
                     BLUE TEAM DOMINANT CLASS:
                   </div>
                   <div className='  flex-1 text-5xl flex flex-col align-middle justify-center italic p-3' style={{ textAlign: "left", backgroundColor: "#111111", borderBottom: "0.5vh solid #b99c6a", boxShadow: "inset 0.5vh 0.5vh 1vh 0.5vh black" }}>
-                    TANK
+                    {blueTeamDominant}
                   </div>
                 </div>
               </div>
@@ -768,10 +827,19 @@ export default function Home() {
                 <div className='infoDiv text-sm' style={{ textAlign: "left", letterSpacing: "0px", padding: "1vh" }}>
                   <div>You haven't picked any enemy champion.
                     The enemy dominant class can only be an assumption by hoping for a counter to your team’s dominant class.
-                    Considering the assumption you would counter the enemy with a <span className='text-lg underline'>50% of mage, 25% of tank and 25% of assasin.</span>
+                    Considering the assumption you would counter the enemy with a <span className='text-lg underline'>{offeredClasses.map((cls,index)=>{
+                      if(index<offeredClasses.length-2){
+                        return `${Math.floor(cls[1]/offeredClasses.length*100)}% of ${cls[0].toLowerCase()}, `
+                      }else if(index<offeredClasses.length-1){
+                        return `${Math.floor(cls[1]/offeredClasses.length*100)}% of ${cls[0].toLowerCase()} `
+                      }
+                      else{
+                        return `and ${Math.floor(cls[1]/offeredClasses.length*100)}% of ${cls[0].toLowerCase()}`
+                      }
+                    })}</span>
                   </div>
                 </div>
-                <div className='cursor-pointer seeClasses text-3xl' style={{ border: "0.5vh solid #b99c6a", width: "max-content", padding: "2vh", letterSpacing: "1.5px", maxWidth: "80%" }} onClick={() => { setOfferStage(true); showOffers(["Mage"], "mid"); }}>SEE MAGES</div>
+                <div className='cursor-pointer seeClasses text-3xl' style={{ border: "0.5vh solid #b99c6a", width: "max-content", padding: "2vh", letterSpacing: "1.5px", maxWidth: "80%" }} onClick={() => { setOfferStage(true); showOffers([offeredClasses[0][0]], ""); }}>SEE {offeredClasses.length>0 && offeredClasses[0][0].toUpperCase()}S</div>
               </div>
               {/* <div className='absolute t-0 l-0' style={{borderRadius:"50%",border:"0.5vh solid #b99c6a",zIndex:"100", width:"10vh", height:"10vh", transform:"translate(-50%,-50%)", background:"transparent"}}></div> */}
             </div>

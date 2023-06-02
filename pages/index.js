@@ -347,21 +347,10 @@ export default function Home() {
   const [offeredClasses,setOfferedClasses] = useState([]);
   const [blueTeamDominant,setBlueTeamDominant] = useState(""); 
 
+  const [selfLane, setSelfLane] = useState("");
+
   const calculatePickProb = (_players, _remClasses) => {
     if (_players.every(player => player.team === "blue" || player.isPicked === false)) { // HA AZ ELLENFÉLBŐL MÉG NEM VÁLASZTOTTAK HŐST
-      // if(Object.keys(_remClasses.blue).every((cls)=>_remClasses.blue[cls]==0 || cls=="Controller")){
-      //   console.log("mind 0 vagy controller");
-      //   console.log("Tehát a legpopulárisabb osztály ellenosztálya ellen választunk")
-      //   console.log("A legpopulárisabb:");
-      //   console.log(_remClasses.blueTeamClasses);
-      //   // ENNEK AZ OBJEKTUMNAK A MAXJA 👆
-
-      // }else{
-      //   // HA VAN OLYAN AMI COUNTER
-      // }
-
-      // ENNEK AZ OBJEKTUMNAK A MAXJA 👆
-
       let max = 0;
       let maxKey = "";
       for(const [key,value] of Object.entries(_remClasses.blueTeamClasses)){
@@ -386,10 +375,20 @@ export default function Home() {
 
       setOfferedClasses(sortable);
 
+      const player = _players.find(plyr => plyr.team === "blue" && plyr.self === true);
+
+      if(player && player.posPicked){
+        setSelfLane(player.pos);
+      }
+
       const probDiv = document.getElementById("noenemyprob");
       probDiv.classList.add("noEnemyProbDivFull");
     }
   }
+
+  useEffect(()=>{
+    console.log(players);
+  },[players])
 
   const [lockedDiv, setLockedDiv] = useState(null);
 
@@ -489,6 +488,13 @@ export default function Home() {
 
     setPlayers(_players);
   }
+
+  useEffect(()=>{
+    const player = players.find(plyr => plyr.team === "blue" && plyr.self === true);
+    if(player && player.posPicked){
+      setSelfLane(player.pos);
+    }
+  },[players])
 
   const updatePosProbs = (_players) => {
     let pickedNumBlue = 0;
@@ -839,7 +845,7 @@ export default function Home() {
                     })}</span>
                   </div>
                 </div>
-                <div className='cursor-pointer seeClasses text-3xl' style={{ border: "0.5vh solid #b99c6a", width: "max-content", padding: "2vh", letterSpacing: "1.5px", maxWidth: "80%" }} onClick={() => { setOfferStage(true); showOffers([offeredClasses[0][0]], ""); }}>SEE {offeredClasses.length>0 && offeredClasses[0][0].toUpperCase()}S</div>
+                <div className='cursor-pointer seeClasses text-3xl' style={{ border: "0.5vh solid #b99c6a", width: "max-content", padding: "2vh", letterSpacing: "1.5px", maxWidth: "80%" }} onClick={() => { setOfferStage(true); showOffers([offeredClasses[0][0]], selfLane); }}>SEE {offeredClasses.length>0 && offeredClasses[0][0].toUpperCase()}S{selfLane!=="" && " ON "}{selfLane!=="" && selfLane.toUpperCase()}</div>
               </div>
               {/* <div className='absolute t-0 l-0' style={{borderRadius:"50%",border:"0.5vh solid #b99c6a",zIndex:"100", width:"10vh", height:"10vh", transform:"translate(-50%,-50%)", background:"transparent"}}></div> */}
             </div>

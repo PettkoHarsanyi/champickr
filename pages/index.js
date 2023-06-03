@@ -175,6 +175,8 @@ export default function Home() {
 
     const probDiv = document.getElementById("noenemyprob");
     probDiv.classList.remove("noEnemyProbDivFull");
+    const probDiv2 = document.getElementById("enemyprob");
+    probDiv2.classList.remove("enemyProbDivFull");
 
     setOfferStage(false);
 
@@ -300,11 +302,35 @@ export default function Home() {
       })
     })
 
+    let _remBlueClasses = [];
+    let _remRedClasses = [];
+    let _blueTeamClasses = [];
+    let _redTeamClasses = [];
+
+    for (var key in remBlueClasses) _remBlueClasses.push([key, remBlueClasses[key]]);
+    for (var key in remRedClasses) _remRedClasses.push([key, remRedClasses[key]]);
+    for (var key in blueTeamClasses) _blueTeamClasses.push([key, blueTeamClasses[key]]);
+    for (var key in redTeamClasses) _redTeamClasses.push([key, redTeamClasses[key]]);
+
+    _remBlueClasses.sort(function (a, b) {
+      return b[1] - a[1];
+    });
+    _remRedClasses.sort(function (a, b) {
+      return b[1] - a[1];
+    });
+    _blueTeamClasses.sort(function (a, b) {
+      return b[1] - a[1];
+    });
+    _redTeamClasses.sort(function (a, b) {
+      return b[1] - a[1];
+    });
+
+
     return {
-      "blue": remBlueClasses,
-      "red": remRedClasses,
-      "blueTeamClasses": blueTeamClasses,
-      "redTeamClasses": redTeamClasses,
+      "blue": _remBlueClasses,
+      "red": _remRedClasses,
+      "blueTeamClasses": _blueTeamClasses,
+      "redTeamClasses": _redTeamClasses,
     }
 
 
@@ -343,52 +369,57 @@ export default function Home() {
     lastPicked.previousElementSibling.classList.add("champpicPicked")
     modifyPlayer(selectedPlayer.player, { "champion": _champion, "isPicked": true, "classProb": champClasses })
   }
-  
-  const [offeredClasses,setOfferedClasses] = useState([]);
-  const [blueTeamDominant,setBlueTeamDominant] = useState(""); 
+
+  const [offeredClasses, setOfferedClasses] = useState([]);
+  const [blueTeamDominant, setBlueTeamDominant] = useState("");
+  const [redTeamDominant, setRedTeamDominant] = useState("");
+
+  const [blueUncountered, setBlueUncountered] = useState("");
+  const [redUncountered, setRedUncountered] = useState("");
+
 
   const [selfLane, setSelfLane] = useState("");
 
+
+
   const calculatePickProb = (_players, _remClasses) => {
     if (_players.every(player => player.team === "blue" || player.isPicked === false)) { // HA AZ ELLENFÉLBŐL MÉG NEM VÁLASZTOTTAK HŐST
-      let max = 0;
-      let maxKey = "";
-      for(const [key,value] of Object.entries(_remClasses.blueTeamClasses)){
-        if(value>max){
-          max = value,
-          maxKey = key;
-        }
-      }
 
-      setBlueTeamDominant(maxKey);
+      setBlueTeamDominant(_remClasses.blueTeamClasses[0][0]);
 
-      let scndbs = secondBaseCountersOf(maxKey);
-      
+      let scndbs = secondBaseCountersOf(_remClasses.blueTeamClasses[0][0]);
+
       let sortable = [];
       for (var cls in scndbs) {
-          sortable.push([cls, scndbs[cls]]);
+        sortable.push([cls, scndbs[cls]]);
       }
-      
-      sortable.sort(function(a, b) {
-          return b[1] - a[1];
+
+      sortable.sort(function (a, b) {
+        return b[1] - a[1];
       });
 
       setOfferedClasses(sortable);
 
       const player = _players.find(plyr => plyr.team === "blue" && plyr.self === true);
 
-      if(player && player.posPicked){
+      if (player && player.posPicked) {
         setSelfLane(player.pos);
       }
 
       const probDiv = document.getElementById("noenemyprob");
       probDiv.classList.add("noEnemyProbDivFull");
+    } else { // HA MÁR VAN ENEMY HŐS
+      const probDiv = document.getElementById("enemyprob");
+      probDiv.classList.add("enemyProbDivFull");
+
+      setBlueTeamDominant(_remClasses.blueTeamClasses[0][0])
+      setRedTeamDominant(_remClasses.redTeamClasses[0][0])
+
+      setBlueUncountered(_remClasses.blue[0][0]);
+      setRedUncountered(_remClasses.red[0][0]);
+
     }
   }
-
-  useEffect(()=>{
-    console.log(players);
-  },[players])
 
   const [lockedDiv, setLockedDiv] = useState(null);
 
@@ -489,12 +520,12 @@ export default function Home() {
     setPlayers(_players);
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     const player = players.find(plyr => plyr.team === "blue" && plyr.self === true);
-    if(player && player.posPicked){
+    if (player && player.posPicked) {
       setSelfLane(player.pos);
     }
-  },[players])
+  }, [players])
 
   const updatePosProbs = (_players) => {
     let pickedNumBlue = 0;
@@ -815,7 +846,29 @@ export default function Home() {
                 }
               </div>
             </div>
-            <div id="noenemyprob" className='noEnemyProbDiv flex flex-col relative z-40'>
+            <div id="enemyprob" className='enemyProbDiv z-40 absolute flex flex-row justify-between'>
+              <div className='w-1/2 flex flex-col items-center leftProb' style={{ borderRight: "0.5vh solid #b99c6a" }}>
+                <div className='rounded-full w-1/5 aspect-square absolute top-[-55pt] p-4' style={{ border: "0.5vh solid #b99c6a", backgroundColor: "black" }}>
+                  <Image src={blueTeamDominant == "" ? tank : classToPics[blueTeamDominant]} alt="class dominant" />
+                </div>
+                <div className='mt-28 mx-5 flex flex-col gap-10 text-4xl'>
+                  <div>BLUE TEAM DOMINANT</div>
+                  <div>{blueTeamDominant.toUpperCase()}</div>
+                  <div className='mx-5 text-xl infoDiv' style={{}}>However, your team's uncountered class is {blueUncountered}</div>
+                </div>
+              </div>
+              <div className='w-1/2 flex flex-col items-center rightProb' style={{ borderRight: "0.5vh solid #b99c6a" }}>
+                <div className='rounded-full w-1/5 aspect-square absolute top-[-55pt] p-4' style={{ border: "0.5vh solid #b99c6a", backgroundColor: "black" }}>
+                  <Image src={redTeamDominant == "" ? tank : classToPics[redTeamDominant]} alt="class dominant" />
+                </div>
+                <div className='mt-28 mx-5 flex flex-col gap-10 text-4xl'>
+                  <div>RED TEAM DOMINANT</div>
+                  <div>{redTeamDominant.toUpperCase()}</div>
+                  <div className='mx-5 text-xl infoDiv' style={{}}>However, the enemy team's uncountered class is {redUncountered}</div>
+                </div>
+              </div>
+            </div>
+            <div id="noenemyprob" className='noEnemyProbDiv flex flex-col z-40 absolute'>
               <div className='h-[30%] flex flex-row relative'>
                 <div className='h-[100%] aspect-square ' style={{ border: "solid #b99c6a 0.5vh", borderTop: "none", borderLeft: "none" }}>
                   <Image src={fighter} width={192} height={192} alt='class' />
@@ -833,19 +886,19 @@ export default function Home() {
                 <div className='infoDiv text-sm' style={{ textAlign: "left", letterSpacing: "0px", padding: "1vh" }}>
                   <div>You haven't picked any enemy champion.
                     The enemy dominant class can only be an assumption by hoping for a counter to your team’s dominant class.
-                    Considering the assumption you would counter the enemy with a <span className='text-lg underline'>{offeredClasses.map((cls,index)=>{
-                      if(index<offeredClasses.length-2){
-                        return `${Math.floor(cls[1]/offeredClasses.length*100)}% of ${cls[0].toLowerCase()}, `
-                      }else if(index<offeredClasses.length-1){
-                        return `${Math.floor(cls[1]/offeredClasses.length*100)}% of ${cls[0].toLowerCase()} `
+                    Considering the assumption you would counter the enemy with a <span className='text-lg underline'>{offeredClasses.map((cls, index) => {
+                      if (index < offeredClasses.length - 2) {
+                        return `${Math.floor(cls[1] / offeredClasses.length * 100)}% of ${cls[0].toLowerCase()}, `
+                      } else if (index < offeredClasses.length - 1) {
+                        return `${Math.floor(cls[1] / offeredClasses.length * 100)}% of ${cls[0].toLowerCase()} `
                       }
-                      else{
-                        return `and ${Math.floor(cls[1]/offeredClasses.length*100)}% of ${cls[0].toLowerCase()}`
+                      else {
+                        return `and ${Math.floor(cls[1] / offeredClasses.length * 100)}% of ${cls[0].toLowerCase()}`
                       }
                     })}</span>
                   </div>
                 </div>
-                <div className='cursor-pointer seeClasses text-3xl' style={{ border: "0.5vh solid #b99c6a", width: "max-content", padding: "2vh", letterSpacing: "1.5px", maxWidth: "80%" }} onClick={() => { setOfferStage(true); showOffers([offeredClasses[0][0]], selfLane); }}>SEE {offeredClasses.length>0 && offeredClasses[0][0].toUpperCase()}S{selfLane!=="" && " ON "}{selfLane!=="" && selfLane.toUpperCase()}</div>
+                <div className='cursor-pointer seeClasses text-3xl' style={{ border: "0.5vh solid #b99c6a", width: "max-content", padding: "2vh", letterSpacing: "1.5px", maxWidth: "80%" }} onClick={() => { setOfferStage(true); showOffers([offeredClasses[0][0]], selfLane); }}>SEE {offeredClasses.length > 0 && offeredClasses[0][0].toUpperCase()}S{selfLane !== "" && " ON "}{selfLane !== "" && selfLane.toUpperCase()}</div>
               </div>
               {/* <div className='absolute t-0 l-0' style={{borderRadius:"50%",border:"0.5vh solid #b99c6a",zIndex:"100", width:"10vh", height:"10vh", transform:"translate(-50%,-50%)", background:"transparent"}}></div> */}
             </div>
